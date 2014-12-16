@@ -1,5 +1,6 @@
-# gavel2html
 [![Build Status](https://travis-ci.org/apiaryio/gavel2html.svg)](https://travis-ci.org/apiaryio/gavel2html)
+
+# gavel2html
 
 Convert output from [Gavel](https://github.com/apiaryio/gavel.js) to HTML
 

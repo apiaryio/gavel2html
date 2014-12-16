@@ -1,0 +1,1 @@
+module.exports = require('./gavel2html').Gavel2Html

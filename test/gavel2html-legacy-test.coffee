@@ -1,7 +1,7 @@
 {assert}      = require 'chai'
 
 Gavel2Html    = require '../src/index'
-fixtures      = require './fixtures/gavel2html'
+fixtures      = require './fixtures/gavel2html-legacy'
 
 outputOptions = fixtures.gavel2htmlOutputOptions
 
@@ -22,17 +22,17 @@ runTest = (test, outputOptions) ->
 
 
 
-describe 'Gavel2Html Tests', ->
+describe 'Gavel2Html Tests with legacy JSON property array notation', ->
   describe 'headers tests', ->
     outputOptions.comments = false
-    for test in fixtures.testsHeaders
+    for name, test of fixtures.testsHeaders
       do (test) ->
         runTest test, outputOptions
 
 
   describe 'body tests', ->
     outputOptions.comments = true
-    for test in fixtures.testsBody
+    for name, test of fixtures.testsBody
       do (test) ->
         runTest test, outputOptions
 

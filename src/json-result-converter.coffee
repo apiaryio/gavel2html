@@ -151,31 +151,69 @@ class JsonResultConverter extends Converter
   #@private
   getErrors: ()->
     if not (@gavelResult.rawData and @gavelResult.rawData.length)
-      return []
+      return [] # not sure about this, added keys will not be marked as addeds
 
     amandaErrorsPaths = {}
     errors = []
-    dataExpectedPaths = []
+    dataExpectedPointers = []
 
+    # get all pointers in expected data
     traverse(@dataExpected).forEach (nodeValue) ->
-      dataExpectedPaths.push jsonPointer.compile this.path
+      dataExpectedPointers.push jsonPointer.compile this.path
       return
 
+    # path from real does not exits in expected data so it's addded
     traverse(@dataReal).forEach (nodeValue) ->
-      if not (jsonPointer.compile(this.path) in dataExpectedPaths)
+      if not (jsonPointer.compile(this.path) in dataExpectedPointers)
         errors.push {pathArray: this.path, value: nodeValue, 'state': 1, 'message': undefined}
       return
 
+    # get unique paths in errors
     for i in [0..@gavelResult.rawData.length - 1]
+
+      # get pointer from array and sanitize 'null' path array meant as root
       if @gavelResult.rawData[i]['property']
         pointer = jsonPointer.compile @gavelResult.rawData[i]['property']
       else
-        pointer = '/'
+        pointer = ''
+
       if not amandaErrorsPaths[pointer]
         amandaErrorsPaths[pointer] = @gavelResult.rawData[i]['property'] or []
 
-    for k,v of amandaErrorsPaths
-      errors.push @getStateAndMessageFromAmandaResult pathArray: v, amandaResult: @gavelResult.rawData, lowerCasedKeys: false
+    # get aggregated message and state for each error pointer/pathArray
+    for pointer, pathArray of amandaErrorsPaths
+      errors.push @getStateAndMessageFromAmandaResult pathArray: pathArray, lowerCasedKeys: false
+
+    return errors
+
+  #@private
+  getErrorsFromResults: () ->
+    if @gavelResult.results.length == 0
+      return [] # not sure about this, added keys will not be marked as added
+
+    errorsPaths = {}
+    errors = []
+    dataExpectedPointers = []
+
+    # get all pointers in expected data
+    traverse(@dataExpected).forEach (nodeValue) ->
+      dataExpectedPointers.push jsonPointer.compile this.path
+      return
+
+    # path from real does not exits in expected data so it's addded
+    traverse(@dataReal).forEach (nodeValue) ->
+      if not (jsonPointer.compile(this.path) in dataExpectedPointers)
+        errors.push {pathArray: this.path, value: nodeValue, 'state': 1, 'message': undefined}
+      return
+
+    # get unique paths in errors
+    for result in @gavelResult.results
+      if result['pointer'] # filter out non JSON related errors
+        errorsPaths[result['pointer']] = jsonPointer.parse result['pointer']
+
+    # get aggregated message and state for each error pointer/pathArray
+    for pointer, pathArray of errorsPaths
+      errors.push @getStateAndMessageFromResults pathArray: pathArray, lowerCasedKeys: false
 
     return errors
 

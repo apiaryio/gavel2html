@@ -33,6 +33,7 @@
     "mocha": "^2.0.1"
   },
   "dependencies": {
+    "clone": "^0.2.0",
     "googlediff": "^0.1.0",
     "json-pointer": "^0.2.2",
     "traverse": "^0.6.6"

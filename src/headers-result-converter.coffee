@@ -1,9 +1,9 @@
+clone = require 'clone'
 Converter = require './converter'
 
 class HeadersResultConverter extends Converter
   #@protected
-  getHtmlPrivate:  ->
-
+  getLinesFromAmandaResults: ->
     @dataReal = @getFromString @dataReal
     @dataExpected = @getFromString @dataExpected
     lowercasedReal = @getLowercased @dataReal
@@ -12,20 +12,26 @@ class HeadersResultConverter extends Converter
     lowercasedExpectedKeys = Object.keys(lowercasedExpected)
     lowercasedReal = Object.keys(lowercasedReal)
 
+    dataRealWithExpected = clone @dataReal
     for k, v of @dataExpected
       if not(k.toLowerCase() in lowercasedReal)
-        @dataReal[k] = v
+        dataRealWithExpected[k] = v
 
     lines = []
 
-    for k, v of @dataReal
+    for k, v of dataRealWithExpected
       #because we want also display added headers ;(
       if not(k.toLowerCase() in lowercasedExpectedKeys)
         lines.push {pathArray: [k], value: @dataReal[k], 'state': 1, 'message': undefined}
       else
-        result = @getStateAndMessageFromAmandaResult pathArray: [k], amandaResult: @gavelResult.rawData, lowerCasedKeys: true
-        result['value'] = @dataReal[k]
+        result = @getStateAndMessageFromAmandaResult pathArray: [k], lowerCasedKeys: true
+        result['value'] = dataRealWithExpected[k]
         lines.push result
+
+    return lines
+
+  getHtmlPrivate:  ->
+    lines = @getLinesFromAmandaResults()
 
     html = ''
 

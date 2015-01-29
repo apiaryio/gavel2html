@@ -66,12 +66,12 @@ h.headersRealFailValueCase =
   gavelResult: {
     "results": [
       {
-        "messagae": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
+        "message": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
         "severity": "error",
         "pointer": "/testheader2"
       },
       {
-        "messagae": "Value of the ‘testheader1’ must be 'testHeader1Val'.",
+        "message": "Value of the ‘testheader1’ must be 'testHeader1Val'.",
         "severity": "error",
         "pointer": "/testheader1"
       }
@@ -89,12 +89,12 @@ h.headersRealFailMiss =
   gavelResult: {
     "results": [
       {
-        "messagae": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
+        "message": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
         "severity": "error",
         "pointer": "/testheader2"
       },
       {
-        "messagae": "The ‘testheader2’ property is required.",
+        "message": "The ‘testheader2’ property is required.",
         "severity": "error",
         "pointer": "/testheader2"
       }
@@ -113,7 +113,7 @@ h.headersRealFailChanged =
   gavelResult: {
     "results": [
       {
-        "messagae": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
+        "message": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
         "severity": "error",
         "pointer": "/testheader2"
       }
@@ -132,12 +132,12 @@ h.headersRealFailEmpty =
   gavelResult: {
     "results": [
       {
-        "messagae": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
+        "message": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
         "severity": "error",
         "pointer": "/testheader2"
       },
       {
-        "messagae": "The ‘testheader2’ property is required.",
+        "message": "The ‘testheader2’ property is required.",
         "severity": "error",
         "pointer": "/testheader2"
       }
@@ -179,7 +179,7 @@ b.bodyTypeFailFailIntVsStringRoot =
   gavelResult: {
     "results": [
       {
-        "messagae": "The undefined property must be a number (current value is \"1\").",
+        "message": "The undefined property must be a number (current value is \"1\").",
         "severity": "error",
         "pointer": ""
       }
@@ -202,7 +202,7 @@ b.bodyTypeFailStringVsIntRoot =
   gavelResult: {
     "results": [
       {
-        "messagae": "The undefined property must be a string (current value is 1).",
+        "message": "The undefined property must be a string (current value is 1).",
         "severity": "error",
         "pointer": ""
       }
@@ -225,7 +225,7 @@ b.bodyTypeFailPrimitiveVsObjRoot =
   gavelResult: {
     "results": [
       {
-        "messagae": "The undefined property must be a string (current value is {\"key\":\"val\"}).",
+        "message": "The undefined property must be a string (current value is {\"key\":\"val\"}).",
         "severity": "error",
         "pointer": ""
       }
@@ -253,7 +253,7 @@ b.bodyTypeFailObjVsPrimitiveRoot =
   gavelResult: {
     "results": [
       {
-        "messagae": "The  property must be an object (current value is 1).",
+        "message": "The  property must be an object (current value is 1).",
         "severity": "error",
         "pointer": ""
       }
@@ -277,7 +277,7 @@ b.bodyTypeFailObjVsArrayRoot =
   gavelResult: {
     "results": [
       {
-        "messagae": "The  property must be an object (current value is [1,2,3]).",
+        "message": "The  property must be an object (current value is [1,2,3]).",
         "severity": "error",
         "pointer": ""
       }
@@ -301,12 +301,12 @@ b.bodyTypeFailObjVsArrayRootNoSchema =
   gavelResult: {
     "results": [
       {
-        "messagae": "The  property must be an object (current value is [1,2,3]).",
+        "message": "The  property must be an object (current value is [1,2,3]).",
         "severity": "error",
         "pointer": ""
       },
       {
-        "messagae": "The ‘key’ property is required.",
+        "message": "The ‘key’ property is required.",
         "severity": "error",
         "pointer": "/key"
       }
@@ -335,7 +335,7 @@ b.bodyTypeFailArrayVsObjRoot =
   gavelResult: {
     "results": [
       {
-        "messagae": "The  property must be an array (current value is {\"key\":\"val\"}).",
+        "message": "The  property must be an array (current value is {\"key\":\"val\"}).",
         "severity": "error",
         "pointer": ""
       }
@@ -357,22 +357,22 @@ bodyTypeFailArrayVsObjRootNoSchema =
   gavelResult: {
     "results": [
       {
-        "messagae": "The  property must be an array (current value is {\"key\":\"val\"}).",
+        "message": "The  property must be an array (current value is {\"key\":\"val\"}).",
         "severity": "error",
         "pointer": ""
       },
       {
-        "messagae": "The ‘0’ property is required.",
+        "message": "The ‘0’ property is required.",
         "severity": "error",
         "pointer": "/0"
       },
       {
-        "messagae": "The ‘1’ property is required.",
+        "message": "The ‘1’ property is required.",
         "severity": "error",
         "pointer": "/1"
       },
       {
-        "messagae": "The ‘2’ property is required.",
+        "message": "The ‘2’ property is required.",
         "severity": "error",
         "pointer": "/2"
       }
@@ -432,47 +432,47 @@ b.bodyComplex =
   gavelResult:{
     "results": [
       {
-        "messagae": "The ‘simpleKeyValueOKmiss’ property is required.",
+        "message": "The ‘simpleKeyValueOKmiss’ property is required.",
         "severity": "error",
         "pointer": "/simpleKeyValueOKmiss"
       },
       {
-        "messagae": "The ‘keyWithObjectValueFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
+        "message": "The ‘keyWithObjectValueFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
         "severity": "error",
         "pointer": "/keyWithObjectValueFail/keyWithObjectValueOKnestedKeyMiss"
       },
       {
-        "messagae": "The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).",
+        "message": "The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).",
         "severity": "error",
         "pointer": "/keyWithObjectValueWrongTypeFail"
       },
       {
-        "messagae": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
+        "message": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
         "severity": "error",
         "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKeyMiss"
       },
       {
-        "messagae": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKey2’ property is required.",
+        "message": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKey2’ property is required.",
         "severity": "error",
         "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKey2"
       },
       {
-        "messagae": "The keyWithArrayValueTypeFail property must be an array (current value is {\"key\":\"val\"}).",
+        "message": "The keyWithArrayValueTypeFail property must be an array (current value is {\"key\":\"val\"}).",
         "severity": "error",
         "pointer": "/keyWithArrayValueTypeFail"
       },
       {
-        "messagae": "The ‘keyWithArrayValueTypeFail,0’ property is required.",
+        "message": "The ‘keyWithArrayValueTypeFail,0’ property is required.",
         "severity": "error",
         "pointer": "/keyWithArrayValueTypeFail/0"
       },
       {
-        "messagae": "The ‘keyWithArrayValueTypeFail,1’ property is required.",
+        "message": "The ‘keyWithArrayValueTypeFail,1’ property is required.",
         "severity": "error",
         "pointer": "/keyWithArrayValueTypeFail/1"
       },
       {
-        "messagae": "The ‘keyWithArrayValueTypeFail,2’ property is required.",
+        "message": "The ‘keyWithArrayValueTypeFail,2’ property is required.",
         "severity": "error",
         "pointer": "/keyWithArrayValueTypeFail/2"
       }

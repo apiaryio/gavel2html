@@ -25,13 +25,47 @@ class HeadersResultConverter extends Converter
         lines.push {pathArray: [k], value: @dataReal[k], 'state': 1, 'message': undefined}
       else
         result = @getStateAndMessageFromAmandaResult pathArray: [k], lowerCasedKeys: true
+
         result['value'] = dataRealWithExpected[k]
         lines.push result
 
     return lines
 
+  #@protected
+  getLinesFromResults: ->
+    @dataReal = @getFromString @dataReal
+    @dataExpected = @getFromString @dataExpected
+    lowercasedReal = @getLowercased @dataReal
+    lowercasedExpected = @getLowercased @dataExpected
+
+    lowercasedExpectedKeys = Object.keys(lowercasedExpected)
+    lowercasedReal = Object.keys(lowercasedReal)
+
+    dataRealWithExpected = clone @dataReal
+    for k, v of @dataExpected
+      if not(k.toLowerCase() in lowercasedReal)
+        dataRealWithExpected[k] = v
+
+    lines = []
+
+    for k, v of dataRealWithExpected
+      #because we want also display added headers ;(
+      if not(k.toLowerCase() in lowercasedExpectedKeys)
+        lines.push {pathArray: [k], value: @dataReal[k], 'state': 1, 'message': undefined}
+      else
+        result = @getStateAndMessageFromResults pathArray: [k], lowerCasedKeys: true
+
+        result['value'] = dataRealWithExpected[k]
+        lines.push result
+
+    return lines
+
+
   getHtmlPrivate:  ->
-    lines = @getLinesFromAmandaResults()
+    if @usePointers
+      lines = @getLinesFromResults()
+    else
+      lines = @getLinesFromAmandaResults()
 
     html = ''
 

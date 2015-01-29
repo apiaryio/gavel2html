@@ -134,3 +134,36 @@ describe 'JsonResultConverter', () ->
           result = jsonResultConverter.getErrorsFromResults()
           result = JSON.parse JSON.stringify result
           assert.deepEqual result, expectedOutput
+
+  describe 'regression test for migration from amandaResults to JSON pointer based results in bodies with root level primitive type mismatch', () ->
+    expectedOutput =  [
+      {
+        pathArray: [],
+        state: 2,
+        message: 'The  property must be an object (current value is 1).'
+      }
+    ]
+
+    describe 'getErrors', () ->
+      describe 'when called', () ->
+        it 'should have proper structure and values', () ->
+          jsonResultConverter = new JsonResultConverter {
+            dataReal: JSON.parse arrayFixtures.testsBody.bodyTypeFailObjVsPrimitiveRoot.dataReal
+            dataExpected: JSON.parse arrayFixtures.testsBody.bodyTypeFailObjVsPrimitiveRoot.dataExpected
+            gavelResult: arrayFixtures.testsBody.bodyTypeFailObjVsPrimitiveRoot.gavelResult
+          }
+          result = jsonResultConverter.getErrors()
+          result = JSON.parse JSON.stringify result
+          assert.deepEqual result, expectedOutput
+
+    describe 'getErrorsFromResults', () ->
+      describe 'when called', () ->
+        it 'should have proper structure and values', () ->
+          jsonResultConverter = new JsonResultConverter {
+            dataReal: JSON.parse pointerFixtures.testsBody.bodyTypeFailObjVsPrimitiveRoot.dataReal
+            dataExpected: JSON.parse pointerFixtures.testsBody.bodyTypeFailObjVsPrimitiveRoot.dataExpected
+            gavelResult: pointerFixtures.testsBody.bodyTypeFailObjVsPrimitiveRoot.gavelResult
+          }
+          result = jsonResultConverter.getErrorsFromResults()
+          result = JSON.parse JSON.stringify result
+          assert.deepEqual result, expectedOutput

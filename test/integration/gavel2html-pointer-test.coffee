@@ -21,7 +21,7 @@ runTest = (test, outputOptions) ->
     it 'used errors should be as expected', ->
       assert.deepEqual gavel2html.usedErrors, test.usedErrors
 
-describe.skip 'Gavel2Html Tests with JSON pointer notation', ->
+describe 'Gavel2Html Tests with JSON pointer notation', ->
   describe 'headers tests', ->
     outputOptions.comments = false
     for name, test of fixtures.testsHeaders

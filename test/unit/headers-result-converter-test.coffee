@@ -37,7 +37,7 @@ describe 'HeadersResultConverter', () ->
           result = JSON.parse JSON.stringify result
           assert.deepEqual result, expectedOutput
 
-    describe.skip 'getLinesFromResults', () ->
+    describe 'getLinesFromResults', () ->
       describe 'when called', () ->
         it 'should have proper structure and values', () ->
           jsonResultConverter = new HeadersResultConverter {
@@ -81,7 +81,7 @@ describe 'HeadersResultConverter', () ->
           result = JSON.parse JSON.stringify result
           assert.deepEqual result, expectedOutput
 
-    describe.skip 'getLinesFromResults', () ->
+    describe 'getLinesFromResults', () ->
       describe 'when called', () ->
         it 'should have proper structure and values', () ->
           jsonResultConverter = new HeadersResultConverter {
@@ -125,7 +125,7 @@ describe 'HeadersResultConverter', () ->
           result = JSON.parse JSON.stringify result
           assert.deepEqual result, expectedOutput
 
-    describe.skip 'getLinesFromResults', () ->
+    describe 'getLinesFromResults', () ->
       describe 'when called', () ->
         it 'should have proper structure and values', () ->
           jsonResultConverter = new HeadersResultConverter {

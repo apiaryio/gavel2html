@@ -20,7 +20,7 @@ escapeBasicHtml = (val) ->
   .replace(regExpQuot, htmlEntityQuot)
 
 class Converter
-  constructor: ({@dataReal, @dataExpected, @gavelResult}) ->
+  constructor: ({@dataReal, @dataExpected, @gavelResult, @usePointers}) ->
     @usedErrors   = []
 
   getHtml: ({@wrapWith, @startTag, @missingStartTag, @addedStartTag, @changedStartTag, @endTag, @comments, @commentStartTag, @commentEndTag, @identString}) ->
@@ -137,7 +137,7 @@ class Converter
 
     if resultsCount
       for result in @gavelResult.results
-        if result['pointer'] # filter out non json related errors
+        if result['pointer']? # filter out non json related errors
           if @areArraysIdentical pathArray.map(transformKeys), jsonPointer.parse(result['pointer'])
             errorPointer = result['pointer']
             # key is missing in real and is present in expected, so it's missing

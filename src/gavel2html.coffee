@@ -13,10 +13,11 @@ transformJsonData = (real, expected) ->
   return {real: realTransformed, expected: expectedTransformed}
 
 class Gavel2Html
-  constructor: ({dataReal, dataExpected, gavelResult}) ->
+  constructor: ({dataReal, dataExpected, gavelResult, usePointers}) ->
     @dataReal     = dataReal
     @dataExpected = dataExpected
     @gavelResult  = gavelResult
+    @usePointers  = usePointers
     @usedErrors   = []
 
 
@@ -61,6 +62,7 @@ class Gavel2Html
       dataReal: @dataReal
       dataExpected: @dataExpected
       gavelResult: @gavelResult
+      usePointers: @usePointers
     }
 
     switch @gavelResult?.validator

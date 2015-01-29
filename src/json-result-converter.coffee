@@ -10,7 +10,11 @@ class JsonResultConverter extends Converter
     prevLevel = 0
     prevNode = null
     errorsPaths = []
-    errors = @getErrors()
+    if @usePointers
+      errors = @getErrorsFromResults()
+    else
+      errors = @getErrors()
+
     closingBrackets = []
     typesOnLevels = {}
     @usedErrors = []
@@ -208,7 +212,7 @@ class JsonResultConverter extends Converter
 
     # get unique paths in errors
     for result in @gavelResult.results
-      if result['pointer'] # filter out non JSON related errors
+      if result['pointer']? # filter out non JSON related errors
         errorsPaths[result['pointer']] = jsonPointer.parse result['pointer']
 
     # get aggregated message and state for each error pointer/pathArray

@@ -204,7 +204,7 @@ b.bodyTypeFailObjVsPrimitiveRoot =
 
 
 
-b.sbodyTypeFailObjVsArrayRoot =
+b.bodyTypeFailObjVsArrayRoot =
   testDesc: 'when expected body is object and real is array'
   dataReal:  JSON.stringify [1,2,3]
   dataExpected: JSON.stringify {"key": "val"}

@@ -516,6 +516,102 @@ b.bodyComplex =
     "/keyWithArrayValueTypeFail"
     ]
 
+b.bodyComplexWithNonPointerError =
+  testDesc: 'complex body test with non pointer error in gavel results'
+  dataReal:  JSON.stringify bodyComplexReal
+  dataExpected: JSON.stringify bodyComplexExpected
+  gavelResult:{
+    "results": [
+      {
+        "message": "Your mamma can't swim up the hill."
+        "severity": "error"
+      }
+      {
+        "message": "The ‘simpleKeyValueOKmiss’ property is required.",
+        "severity": "error",
+        "pointer": "/simpleKeyValueOKmiss"
+      },
+      {
+        "message": "The ‘keyWithObjectValueFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
+        "severity": "error",
+        "pointer": "/keyWithObjectValueFail/keyWithObjectValueOKnestedKeyMiss"
+      },
+      {
+        "message": "The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).",
+        "severity": "error",
+        "pointer": "/keyWithObjectValueWrongTypeFail"
+      },
+      {
+        "message": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
+        "severity": "error",
+        "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKeyMiss"
+      },
+      {
+        "message": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKey2’ property is required.",
+        "severity": "error",
+        "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKey2"
+      },
+      {
+        "message": "The keyWithArrayValueTypeFail property must be an array (current value is {\"key\":\"val\"}).",
+        "severity": "error",
+        "pointer": "/keyWithArrayValueTypeFail"
+      },
+      {
+        "message": "The ‘keyWithArrayValueTypeFail,0’ property is required.",
+        "severity": "error",
+        "pointer": "/keyWithArrayValueTypeFail/0"
+      },
+      {
+        "message": "The ‘keyWithArrayValueTypeFail,1’ property is required.",
+        "severity": "error",
+        "pointer": "/keyWithArrayValueTypeFail/1"
+      },
+      {
+        "message": "The ‘keyWithArrayValueTypeFail,2’ property is required.",
+        "severity": "error",
+        "pointer": "/keyWithArrayValueTypeFail/2"
+      }
+    ],
+    "validator": "JsonExample"
+  }
+  expectedOutput: '''
+                  <wrapStart>{
+                  <startTag>&quot;simpleKeyValueOK&quot;: &quot;simpleKeyValueOK&quot;</endTag>
+                  <startTag>&quot;simpleKeyValueNumberOK&quot;: 1</endTag>
+                  <startTag>&quot;keyWithObjectValueOK&quot;: {</endTag>
+                  <startTag>  &quot;keyWithObjectValueOKnestedKey&quot;: &quot;keyWithObjectValueOKnestedKey&quot;</endTag>
+                  <startTag>  &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
+                    }
+                  <startTag>&quot;keyWithObjectValueFail&quot;: {</endTag>
+                  <startTag>  &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
+                    }
+                  <changedStartTag>&quot;keyWithObjectValueWrongTypeFail&quot;: [</endTag> <commentStartTag>The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).</commentEndTag>
+                  <addedStartTag>  1</endTag>,
+                  <addedStartTag>  2</endTag>,
+                  <addedStartTag>  3</endTag>
+                    ],
+                  <startTag>&quot;keyWithArrayValueOK&quot;: [</endTag>
+                  <startTag>  1</endTag>,
+                  <startTag>  2</endTag>,
+                  <startTag>  3</endTag>
+                    ],
+                  <startTag>&quot;keyWithArrayValueOK2&quot;: [</endTag>
+                  <startTag>  4</endTag>,
+                  <startTag>  5</endTag>,
+                  <startTag>  6</endTag>
+                    ],
+                  <changedStartTag>&quot;keyWithArrayValueTypeFail&quot;: {</endTag> <commentStartTag>The keyWithArrayValueTypeFail property must be an array (current value is {"key":"val"}).</commentEndTag>
+                  <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
+                    }
+                  }
+                  <wrapEnd>
+                  '''
+  usedErrors: [
+    "/keyWithObjectValueWrongTypeFail",
+    "/keyWithArrayValueTypeFail"
+  ]
+
+
 b.bodyOkWithNestedObjectsInArrays =
   testDesc: 'when expected and real body are the same and contains array of objects'
   dataReal: JSON.stringify {

@@ -1,4 +1,5 @@
 {assert} = require 'chai'
+clone    = require 'clone'
 
 HeadersResultConverter = require '../../src/headers-result-converter'
 arrayFixtures = require '../fixtures/gavel2html-legacy'
@@ -32,9 +33,10 @@ describe 'HeadersResultConverter', () ->
             dataReal: arrayFixtures.testsHeaders.headersRealFailValueCase.dataReal
             dataExpected: arrayFixtures.testsHeaders.headersRealFailValueCase.dataExpected
             gavelResult: arrayFixtures.testsHeaders.headersRealFailValueCase.gavelResult
+            usePointers: false
           }
           result = jsonResultConverter.getLinesFromAmandaResults()
-          result = JSON.parse JSON.stringify result
+          result = clone result, false
           assert.deepEqual result, expectedOutput
 
     describe 'getLinesFromResults', () ->
@@ -44,9 +46,10 @@ describe 'HeadersResultConverter', () ->
             dataReal: pointerFixtures.testsHeaders.headersRealFailValueCase.dataReal
             dataExpected: pointerFixtures.testsHeaders.headersRealFailValueCase.dataExpected
             gavelResult: pointerFixtures.testsHeaders.headersRealFailValueCase.gavelResult
+            usePointers: true
           }
           result = jsonResultConverter.getLinesFromResults()
-          result = JSON.parse JSON.stringify result
+          result = clone result, false
           assert.deepEqual result, expectedOutput
 
   describe 'regression test for migration from amandaResults to JSON pointer based results in headers on value change', () ->
@@ -76,9 +79,10 @@ describe 'HeadersResultConverter', () ->
             dataReal: arrayFixtures.testsHeaders.headersRealFailChanged.dataReal
             dataExpected: arrayFixtures.testsHeaders.headersRealFailChanged.dataExpected
             gavelResult: arrayFixtures.testsHeaders.headersRealFailChanged.gavelResult
+            usePointers: false
           }
           result = jsonResultConverter.getLinesFromAmandaResults()
-          result = JSON.parse JSON.stringify result
+          result = clone result, false
           assert.deepEqual result, expectedOutput
 
     describe 'getLinesFromResults', () ->
@@ -88,9 +92,10 @@ describe 'HeadersResultConverter', () ->
             dataReal: pointerFixtures.testsHeaders.headersRealFailChanged.dataReal
             dataExpected: pointerFixtures.testsHeaders.headersRealFailChanged.dataExpected
             gavelResult: pointerFixtures.testsHeaders.headersRealFailChanged.gavelResult
+            usePointers: true
           }
           result = jsonResultConverter.getLinesFromResults()
-          result = JSON.parse JSON.stringify result
+          result = clone result, false
           assert.deepEqual result, expectedOutput
 
   describe 'regression test for migration from amandaResults to JSON pointer based results in headers in key missing', () ->
@@ -120,9 +125,10 @@ describe 'HeadersResultConverter', () ->
             dataReal: arrayFixtures.testsHeaders.headersRealFailMiss.dataReal
             dataExpected: arrayFixtures.testsHeaders.headersRealFailMiss.dataExpected
             gavelResult: arrayFixtures.testsHeaders.headersRealFailMiss.gavelResult
+            usePointers: false
           }
           result = jsonResultConverter.getLinesFromAmandaResults()
-          result = JSON.parse JSON.stringify result
+          result = clone result, false
           assert.deepEqual result, expectedOutput
 
     describe 'getLinesFromResults', () ->
@@ -132,8 +138,9 @@ describe 'HeadersResultConverter', () ->
             dataReal: pointerFixtures.testsHeaders.headersRealFailMiss.dataReal
             dataExpected: pointerFixtures.testsHeaders.headersRealFailMiss.dataExpected
             gavelResult: pointerFixtures.testsHeaders.headersRealFailMiss.gavelResult
+            usePointers: true
           }
           result = jsonResultConverter.getLinesFromResults()
-          result = JSON.parse JSON.stringify result
+          result = clone result, false
           assert.deepEqual result, expectedOutput
 

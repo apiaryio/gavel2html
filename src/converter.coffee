@@ -19,6 +19,13 @@ escapeBasicHtml = (val) ->
   .replace(regExpGt, htmlEntityGt)
   .replace(regExpQuot, htmlEntityQuot)
 
+_lowerCaseIt = (str) ->
+  str.toLowerCase()
+
+_lambda = (unknown) ->
+  unknown
+
+
 class Converter
   constructor: ({@dataReal, @dataExpected, @gavelResult, @usePointers}) ->
     @usedErrors   = []
@@ -68,26 +75,17 @@ class Converter
     message = ''
 
     if lowerCasedKeys
-      transformKeys = (s) ->
-        s.toLowerCase()
+      transformKeys = _lowerCaseIt
     else
-      transformKeys = (s) ->
-        s
-
-
-    # get all pointers in expected data
-    dataExpectedPointers = []
-    traverse(@dataExpected).forEach (nodeValue) ->
-      dataExpectedPointers.push jsonPointer.compile this.path.map(transformKeys)
-      return
-
-    dataRealPointers = []
-    # get all pointers in expected data
-    traverse(@dataReal).forEach (nodeValue) ->
-      dataRealPointers.push jsonPointer.compile this.path.map(transformKeys)
-      return
+      transformKeys = _lambda
 
     if resultsCount
+      dataRealPointers = []
+      # get all pointers in expected data
+      traverse(@dataReal).forEach (nodeValue) ->
+        dataRealPointers.push jsonPointer.compile this.path.map(transformKeys)
+        return
+
       for i in [0..resultsCount-1]
         if @areArraysIdentical pathArray.map(transformKeys), @gavelResult.rawData[i]?['property'] or []
           errorPointer = jsonPointer.compile(@gavelResult.rawData[i]?['property'] or [])
@@ -117,25 +115,17 @@ class Converter
     message = ''
 
     if lowerCasedKeys
-      transformKeys = (s) ->
-        s.toLowerCase()
+      transformKeys = _lowerCaseIt
     else
-      transformKeys = (s) ->
-        s
-
-    # get all pointers in expected data
-    dataExpectedPointers = []
-    traverse(@dataExpected).forEach (nodeValue) ->
-      dataExpectedPointers.push jsonPointer.compile this.path.map(transformKeys)
-      return
-
-    dataRealPointers = []
-    # get all pointers in expected data
-    traverse(@dataReal).forEach (nodeValue) ->
-      dataRealPointers.push jsonPointer.compile this.path.map(transformKeys)
-      return
+      transformKeys = _lambda
 
     if resultsCount
+      dataRealPointers = []
+      # get all pointers in expected data
+      traverse(@dataReal).forEach (nodeValue) ->
+        dataRealPointers.push jsonPointer.compile this.path.map(transformKeys)
+        return
+
       for result in @gavelResult.results
         if result['pointer']? # filter out non json related errors
           if @areArraysIdentical pathArray.map(transformKeys), jsonPointer.parse(result['pointer'])

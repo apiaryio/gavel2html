@@ -15,17 +15,17 @@ npm install gavel2html
 ```javascript
 Gavel2Html = require('gavel2html');
 
-g2h = Gavel2Html.new({
-  // string - containing real data
-  "realData": real,
+g2h = new Gavel2Html({
+  // string - containing real (body) data
+  "dataReal": real,
 
-  // string - containing expected data
-  "expectedData": expected,
+  // string - containing expected (body) data
+  "dataExpected": expected,
 
   // object - with output from Gavel
-  "gavelOutput": gavelOutput,
+  "gavelResult": gavelOutput,
 
-  // boolean - use JSON pointers from 'resulults' key in gavel data to do not rely on Amanda's data
+  // boolean - use JSON pointers from 'results' key in gavel data to do not rely on Amanda's data
   "usePointers": true
 });
 

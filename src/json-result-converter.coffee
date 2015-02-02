@@ -1,5 +1,6 @@
 traverse = require 'traverse'
 jsonPointer = require 'json-pointer'
+type = require 'is-type'
 
 Converter = require './converter'
 
@@ -48,16 +49,26 @@ class JsonResultConverter extends Converter
             closingBracketsStr = closingBracketsStr.substring(0, closingBracketsStr.length - 1)
             closingBracketsStr += ",\n"
 
-      firstChar = JSON.stringify(nodeValue)[0]
+      typeOfNodeValue = null
+      hasKeys = false
+      if type.array nodeValue
+        typeOfNodeValue = 'array'
+        firstChar = '['
+        lastChar = ']'
+        if nodeValue.length
+          hasKeys = true
+      else if type.object nodeValue
+        typeOfNodeValue = 'object'
+        firstChar = '{'
+        lastChar = '}'
+        for own k, v of nodeValue
+          hasKeys = true
+          break
 
-      if firstChar == '{' and Object.keys(nodeValue).length
+      if hasKeys and typeOfNodeValue
         openingBracket += getIdent(this.level) + firstChar
-        closingBrackets.push "}\n"
-        typesOnLevels[this.level+1] = 'object'
-      if firstChar == '[' and nodeValue.length
-        openingBracket += getIdent(this.level) + firstChar
-        closingBrackets.push "]\n"
-        typesOnLevels[this.level+1] = 'array'
+        closingBrackets.push "#{lastChar}\n"
+        typesOnLevels[this.level+1] = typeOfNodeValue
 
 
       if this.isRoot
@@ -70,7 +81,6 @@ class JsonResultConverter extends Converter
           format = true
         else if openingBracket
           out = openingBracket + "\n"
-
 
 
         if format

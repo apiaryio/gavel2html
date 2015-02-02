@@ -19,12 +19,6 @@ escapeBasicHtml = (val) ->
   .replace(regExpGt, htmlEntityGt)
   .replace(regExpQuot, htmlEntityQuot)
 
-_lowerCaseIt = (str) ->
-  str.toLowerCase()
-
-_lambda = (unknown) ->
-  unknown
-
 
 class Converter
   constructor: ({@dataReal, @dataExpected, @gavelResult, @usePointers}) ->
@@ -70,14 +64,14 @@ class Converter
   #@private
   # aggregate all errors for given path and mark them with state missing, added, changed etc..
   getStateAndMessageFromAmandaResult: ({pathArray, lowerCasedKeys}) ->
-    resultsCount = @gavelResult.rawData.length or 0
+    resultsCount = @gavelResult?.rawData?.length or 0
     state = 0
     message = ''
 
     if lowerCasedKeys
-      transformKeys = _lowerCaseIt
+      transformKeys = @_lowerCaseIt
     else
-      transformKeys = _lambda
+      transformKeys = @_lambda
 
     if resultsCount
       dataRealPointers = []
@@ -110,14 +104,14 @@ class Converter
   #@private
   # aggregate all errors for given path and mark them with state missing, added, changed etc..
   getStateAndMessageFromResults: ({pathArray, lowerCasedKeys}) ->
-    resultsCount = @gavelResult.results.length
+    resultsCount = @gavelResult?.results?.length
     state = 0
     message = ''
 
     if lowerCasedKeys
-      transformKeys = _lowerCaseIt
+      transformKeys = @_lowerCaseIt
     else
-      transformKeys = _lambda
+      transformKeys = @_lambda
 
     if resultsCount
       dataRealPointers = []
@@ -152,6 +146,13 @@ class Converter
   sanitize: (data) ->
     binaryDetect data, sanitizer, escapeBasicHtml
 
+  #@private
+  _lowerCaseIt: (str) ->
+    str.toLowerCase()
+
+  #@private
+  _lambda: (unknown) ->
+    unknown
 
   #@private
   areArraysIdentical: (a1, a2) ->

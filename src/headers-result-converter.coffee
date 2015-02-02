@@ -4,68 +4,48 @@ Converter = require './converter'
 class HeadersResultConverter extends Converter
   #@protected
   getLinesFromAmandaResults: ->
-    @dataReal = @getFromString @dataReal
-    @dataExpected = @getFromString @dataExpected
-    lowercasedReal = @getLowercased @dataReal
-    lowercasedExpected = @getLowercased @dataExpected
-
-    lowercasedExpectedKeys = Object.keys(lowercasedExpected)
-    lowercasedReal = Object.keys(lowercasedReal)
-
-    dataRealWithExpected = clone @dataReal
-    for k, v of @dataExpected
-      if not(k.toLowerCase() in lowercasedReal)
-        dataRealWithExpected[k] = v
-
-    lines = []
-
-    for k, v of dataRealWithExpected
-      #because we want also display added headers ;(
-      if not(k.toLowerCase() in lowercasedExpectedKeys)
-        lines.push {pathArray: [k], value: @dataReal[k], 'state': 1, 'message': undefined}
-      else
-        result = @getStateAndMessageFromAmandaResult pathArray: [k], lowerCasedKeys: true
-
-        result['value'] = dataRealWithExpected[k]
-        lines.push result
-
-    return lines
+    @_getLines()
 
   #@protected
   getLinesFromResults: ->
-    @dataReal = @getFromString @dataReal
+    @_getLines()
+
+  #@private
+  _getLines: ->
+    if @usePointers
+      lineResultGetter = @getStateAndMessageFromResults
+    else
+      lineResultGetter = @getStateAndMessageFromAmandaResult
+
+    @dataReal     = @getFromString @dataReal
     @dataExpected = @getFromString @dataExpected
-    lowercasedReal = @getLowercased @dataReal
-    lowercasedExpected = @getLowercased @dataExpected
 
-    lowercasedExpectedKeys = Object.keys(lowercasedExpected)
-    lowercasedReal = Object.keys(lowercasedReal)
+    lowercasedExpectedKeys = Object.keys(@dataExpected).map (s) -> s.toLowerCase()
+    lowercasedRealKeys     = Object.keys(@dataReal).map (s) -> s.toLowerCase()
 
-    dataRealWithExpected = clone @dataReal
-    for k, v of @dataExpected
-      if not(k.toLowerCase() in lowercasedReal)
-        dataRealWithExpected[k] = v
+    dataRealWithExpected = clone @dataReal, false
+
+    for expectedKey, expectedValue of @dataExpected
+      if expectedKey.toLowerCase() not in lowercasedRealKeys
+        dataRealWithExpected[expectedKey] = expectedValue
 
     lines = []
 
-    for k, v of dataRealWithExpected
+    for k, v of dataRealWithExpected then do (k, v) =>
       #because we want also display added headers ;(
-      if not(k.toLowerCase() in lowercasedExpectedKeys)
+      if k.toLowerCase() not in lowercasedExpectedKeys
         lines.push {pathArray: [k], value: @dataReal[k], 'state': 1, 'message': undefined}
       else
-        result = @getStateAndMessageFromResults pathArray: [k], lowerCasedKeys: true
+        result = lineResultGetter.call @, pathArray: [k], lowerCasedKeys: true
 
-        result['value'] = dataRealWithExpected[k]
+        result['value'] = v
         lines.push result
 
     return lines
 
 
-  getHtmlPrivate:  ->
-    if @usePointers
-      lines = @getLinesFromResults()
-    else
-      lines = @getLinesFromAmandaResults()
+  getHtmlPrivate: ->
+    lines = @_getLines()
 
     html = ''
 
@@ -75,30 +55,18 @@ class HeadersResultConverter extends Converter
     return html
 
 
-  #http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
-  #@private
-  getLowercased: (data) ->
-    ret = {}
-
-    for k, v of data
-      if typeof(k) == 'string'
-        ret[k.toLowerCase()] = v
-      else
-        ret[k] = v
-
-    return ret
-
   #@private
   getFromString: (header) ->
-    if not header or typeof header isnt 'string' then return header
+    if not header or typeof header isnt 'string'
+      return header
 
     headersOut = {}
 
     for line in header.split('\n')
       separator = line.indexOf ':'
       if separator is -1 then continue
-      key   = @trim line.slice 0, separator
-      value = @trim line.slice separator+1
+      key   = line.slice(0, separator).trim()
+      value = line.slice(separator+1).trim()
       headersOut[key] = value
 
     return headersOut

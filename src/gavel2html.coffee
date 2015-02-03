@@ -1,4 +1,5 @@
 Converter = require './converter'
+
 JsonResultConverter = require './json-result-converter'
 TextResultConverter = require './text-result-converter'
 HeadersResultConverter = require './headers-result-converter'
@@ -13,10 +14,11 @@ transformJsonData = (real, expected) ->
   return {real: realTransformed, expected: expectedTransformed}
 
 class Gavel2Html
-  constructor: ({dataReal, dataExpected, gavelResult}) ->
+  constructor: ({dataReal, dataExpected, gavelResult, usePointers}) ->
     @dataReal     = dataReal
     @dataExpected = dataExpected
     @gavelResult  = gavelResult
+    @usePointers  = usePointers
     @usedErrors   = []
 
 
@@ -58,31 +60,25 @@ class Gavel2Html
   #@private
   getConverter: ->
     options = {
-      dataReal: @dataReal
-      dataExpected: @dataExpected
-      gavelResult: @gavelResult
+      @dataReal
+      @dataExpected
+      @gavelResult
+      @usePointers
     }
 
     switch @gavelResult?.validator
       when 'TextDiff'
         return new TextResultConverter options
-      when 'JsonSchema'
+
+      when 'JsonSchema', 'JsonExample'
         transformedData = transformJsonData(options.dataReal, options.dataExpected)
         if transformedData
           options.dataReal = transformedData.real
           options.dataExpected = transformedData.expected
           return new JsonResultConverter options
         return new TextResultConverter options
-      when 'JsonExample'
-        transformedData = transformJsonData(options.dataReal, options.dataExpected)
-        if transformedData
-          options.dataReal = transformedData.real
-          options.dataExpected = transformedData.expected
-          return new JsonResultConverter options
-        return new TextResultConverter options
-      when 'HeadersJsonSchema'
-        return new HeadersResultConverter options
-      when 'HeadersJsonExample'
+
+      when 'HeadersJsonSchema', 'HeadersJsonExample'
         return new HeadersResultConverter options
 
     return new TextResultConverter options

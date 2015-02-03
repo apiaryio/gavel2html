@@ -1,15 +1,4 @@
-#rawData
-#  length
-#  0
-#    property
-#    validator
-#    message
-#  1
-#  .
-#  .
-#  n
-#validator
-
+h = {}
 
 gavel2htmlOutputOptions =
   wrapWith: '<wrapStart>##data<wrapEnd>',
@@ -28,7 +17,7 @@ headersExpected =
 
 headersExpectedEmpty = {}
 
-headersRealOK =
+h.headersRealOK =
   testDesc: 'when expected headers are non empty and real data are the same in real headers'
   dataReal:
     testHeader1: 'testHeader1Val'
@@ -41,7 +30,7 @@ headersRealOK =
   usedErrors: []
 
 
-headersRealOKMore =
+h.headersRealOKMore =
   testDesc: 'when expected headers are non empty and real data extends it'
   dataReal:
     testHeader1: 'testHeader1Val'
@@ -52,7 +41,7 @@ headersRealOKMore =
   expectedOutput: '<wrapStart><startTag>testHeader1: testHeader1Val</endTag><startTag>testHeader2: testHeader2Val</endTag><addedStartTag>testHeader3: testHEader3Val</endTag><wrapEnd>'
   usedErrors: []
 
-headersRealOKKeyCase =
+h.headersRealOKKeyCase =
   testDesc: 'when expected headers are non empty and real data are the same except cAsE of key'
   dataReal:
     testHEAder1: 'testHeader1Val'
@@ -62,7 +51,7 @@ headersRealOKKeyCase =
   expectedOutput: '<wrapStart><startTag>testHEAder1: testHeader1Val</endTag><startTag>testHeader2: testHeader2Val</endTag><wrapEnd>'
   usedErrors: []
 
-headersRealFailValueCase =
+h.headersRealFailValueCase =
   testDesc: 'when expected headers are non empty and real data are the same except cAsE of value'
   dataReal:
     testHeader1: 'tEstHeader1Val'
@@ -77,7 +66,7 @@ headersRealFailValueCase =
   expectedOutput: "<wrapStart><changedStartTag>testHeader1: tEstHeader1Val</endTag> <commentStartTag>Value of the ‘testheader1’ must be 'testHeader1Val'.</commentEndTag><changedStartTag>testHeader2: testHEader2Val</endTag> <commentStartTag>Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
   usedErrors: []
 
-headersRealFailMiss =
+h.headersRealFailMiss =
   testDesc: 'when expected headers are non empty and key missing in real data'
   dataReal:
     testHeader1: 'testHeader1Val'
@@ -91,7 +80,7 @@ headersRealFailMiss =
   expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><missingStartTag>testHeader2: testHeader2Val</endTag> <commentStartTag>The ‘testheader2’ property is required. | Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
   usedErrors: []
 
-headersRealFailChanged =
+h.headersRealFailChanged =
   testDesc: 'when expected headers are non empty and data changed in real data'
   dataReal:
     testHeader1: 'testHeader1Val'
@@ -106,7 +95,7 @@ headersRealFailChanged =
 
   usedErrors: []
 
-headersRealFailEmpty =
+h.headersRealFailEmpty =
   testDesc: 'when expected headers are non empty and real data are empty'
   dataReal: {}
   dataExpected:
@@ -120,7 +109,7 @@ headersRealFailEmpty =
   expectedOutput: "<wrapStart><missingStartTag>testHeader2: testHeader2Val</endTag> <commentStartTag>The ‘testheader2’ property is required. | Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
   usedErrors: []
 
-headersRealOKNoEmpty =
+h.headersRealOKNoEmpty =
   testDesc: 'when expected headers are empty and real data are not empty'
   dataReal:
     testHeader1: 'testHeader1Val'
@@ -131,7 +120,13 @@ headersRealOKNoEmpty =
   usedErrors: []
 
 
-bodyTypeFailFailIntVsStringRoot =
+#
+# Body
+#
+
+b  = {}
+
+b.bodyTypeFailFailIntVsStringRoot =
   testDesc: 'when expected body is integer and real is string'
   dataReal: '1'
   dataExpected: 1
@@ -149,7 +144,7 @@ bodyTypeFailFailIntVsStringRoot =
   usedErrors: ['']
 
 
-bodyTypeFailStringVsIntRoot =
+b.bodyTypeFailStringVsIntRoot =
   testDesc: 'when expected body is string and real is integer'
   dataReal: 1
   dataExpected: "1"
@@ -167,7 +162,7 @@ bodyTypeFailStringVsIntRoot =
   usedErrors: ['']
 
 
-bodyTypeFailPrimitiveVsObjRoot =
+b.bodyTypeFailPrimitiveVsObjRoot =
   testDesc: 'when expected body is primitive and real is object'
   dataReal: JSON.stringify {'key': 'val'}
   dataExpected: "1"
@@ -190,7 +185,7 @@ bodyTypeFailPrimitiveVsObjRoot =
   usedErrors: []
 
 
-bodyTypeFailObjVsPrimitiveRoot =
+b.bodyTypeFailObjVsPrimitiveRoot =
   testDesc: 'when expected body is object and real is primitive'
   dataReal:  "1"
   dataExpected: JSON.stringify {"key": "val"}
@@ -209,7 +204,7 @@ bodyTypeFailObjVsPrimitiveRoot =
 
 
 
-bodyTypeFailObjVsArrayRoot =
+b.bodyTypeFailObjVsArrayRoot =
   testDesc: 'when expected body is object and real is array'
   dataReal:  JSON.stringify [1,2,3]
   dataExpected: JSON.stringify {"key": "val"}
@@ -229,7 +224,7 @@ bodyTypeFailObjVsArrayRoot =
                   '''
   usedErrors: []
 
-bodyTypeFailObjVsArrayRootNoSchema =
+b.bodyTypeFailObjVsArrayRootNoSchema =
   testDesc: 'when expected body is object and real is array  (no schema)'
   dataReal:  JSON.stringify [1,2,3]
   dataExpected: JSON.stringify {"key": "val"}
@@ -249,7 +244,7 @@ bodyTypeFailObjVsArrayRootNoSchema =
                   '''
   usedErrors: []
 
-bodyTypeFailArrayVsObjRoot =
+b.bodyTypeFailArrayVsObjRoot =
   testDesc: 'when expected body is array and real is object'
   dataReal:  JSON.stringify {"key": "val"}
   dataExpected: JSON.stringify [1,2,3]
@@ -267,7 +262,7 @@ bodyTypeFailArrayVsObjRoot =
                   '''
   usedErrors: []
 
-bodyTypeFailArrayVsObjRootNoSchema =
+b.bodyTypeFailArrayVsObjRootNoSchema =
   testDesc: 'when expected body is array and real is object (no schema)'
   dataReal:  JSON.stringify {"key": "val"}
   dataExpected: JSON.stringify [1,2,3]
@@ -325,7 +320,7 @@ bodyComplexReal = {
   "keyWithArrayValueTypeFail": {"key": "val"}
 }
 
-bodyComplex =
+b.bodyComplex =
   testDesc: 'complex body test'
   dataReal:  JSON.stringify bodyComplexReal
   dataExpected: JSON.stringify bodyComplexExpected
@@ -379,7 +374,7 @@ bodyComplex =
     "/keyWithArrayValueTypeFail"
     ]
 
-bodyOkWithNestedObjectsInArrays =
+b.bodyOkWithNestedObjectsInArrays =
   testDesc: 'when expected and real body are the same and contains array of objects'
   dataReal: JSON.stringify {
     "login": "true"
@@ -423,7 +418,7 @@ bodyOkWithNestedObjectsInArrays =
   """
   usedErrors: []
 
-bodyOkWithNestedStringsInArrays =
+b.bodyOkWithNestedStringsInArrays =
   testDesc: 'when expected and real body are the same and contains array of strings'
   dataReal: JSON.stringify {
     "login": "true"
@@ -458,7 +453,7 @@ bodyOkWithNestedStringsInArrays =
   """
   usedErrors: []
 
-bodyOkWithNestedArraysInArrays =
+b.bodyOkWithNestedArraysInArrays =
   testDesc: 'when expected and real body are the same and contains array of arrays'
   dataReal: JSON.stringify {
     "login": "true"
@@ -504,32 +499,11 @@ bodyOkWithNestedArraysInArrays =
 <wrapEnd>
   """
   usedErrors: []
+
 module.exports = {
   gavel2htmlOutputOptions
-  testsHeaders: [
-    headersRealOK
-    headersRealOKMore
-    headersRealOKKeyCase
-    headersRealFailMiss
-    headersRealFailValueCase
-    headersRealFailChanged
-    headersRealFailEmpty
-    headersRealOKNoEmpty
-  ]
-  testsBody: [
-    bodyTypeFailFailIntVsStringRoot
-    bodyTypeFailStringVsIntRoot
-    bodyTypeFailPrimitiveVsObjRoot
-    bodyTypeFailObjVsPrimitiveRoot
-    bodyTypeFailObjVsArrayRoot
-    bodyTypeFailObjVsArrayRootNoSchema
-    bodyTypeFailArrayVsObjRoot
-    bodyTypeFailArrayVsObjRootNoSchema
-    bodyComplex
-    bodyOkWithNestedObjectsInArrays
-    bodyOkWithNestedStringsInArrays
-    bodyOkWithNestedArraysInArrays
-  ]
+  testsHeaders: h
+  testsBody: b
 }
 
 

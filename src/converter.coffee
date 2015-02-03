@@ -62,6 +62,29 @@ class Converter
     return output
 
   #@private
+  # builds an Array filled with all traverse-based jsonPointer.compiled paths
+  # so we can reuse it in future calls
+  buildDataRealPointers: ({compiledPointersKey, transformKeysFn}) ->
+    if not @dataRealPointers?[compiledPointersKey]
+      compiledPointers = []
+      # get all pointers in expected data
+      traverse(@dataReal).forEach ->
+        compiledPointers.push jsonPointer.compile this.path.map(transformKeysFn)
+        return
+      @dataRealPointers ?= {}
+      @dataRealPointers[compiledPointersKey] = compiledPointers
+
+  #@private
+  getPointerTransformKeys: (lowerCasedKeys) ->
+    transformKeysFn = @_lambda
+    compiledPointersKey = 'original'
+
+    if lowerCasedKeys
+      transformKeysFn = @_lowerCaseIt
+      compiledPointersKey = 'lowercased'
+    return [transformKeysFn, compiledPointersKey]
+
+  #@private
   # aggregate all errors for given path and mark them with state missing, added, changed etc..
   getStateAndMessageFromAmandaResult: ({pathArray, lowerCasedKeys}) ->
     resultsCount = @gavelResult?.rawData?.length or 0
@@ -69,13 +92,8 @@ class Converter
     message = ''
 
     if resultsCount
-      transformKeysFn = if lowerCasedKeys then @_lowerCaseIt else @_lambda
-
-      dataRealPointers = []
-      # get all pointers in expected data
-      traverse(@dataReal).forEach (nodeValue) ->
-        dataRealPointers.push jsonPointer.compile this.path.map(transformKeysFn)
-        return
+      [transformKeysFn, compiledPointersKey] = @getPointerTransformKeys lowerCasedKeys
+      @buildDataRealPointers {transformKeysFn, compiledPointersKey}
 
       pathArrayTransformed = pathArray.map transformKeysFn
 
@@ -83,7 +101,7 @@ class Converter
         if @areArraysIdentical pathArrayTransformed, @gavelResult.rawData[i]?['property'] or []
           errorPointer = jsonPointer.compile(@gavelResult.rawData[i]?['property'] or [])
           # key is missing in real and is present in expected, so it's missing
-          if errorPointer not in dataRealPointers
+          if errorPointer not in @dataRealPointers[compiledPointersKey]
             if message
               message = ' | ' + message
             message = @gavelResult.rawData[i]['message'] + message
@@ -108,13 +126,8 @@ class Converter
     message = ''
 
     if resultsCount
-      transformKeysFn = if lowerCasedKeys then @_lowerCaseIt else @_lambda
-
-      dataRealPointers = []
-      # get all pointers in expected data
-      traverse(@dataReal).forEach (nodeValue) ->
-        dataRealPointers.push jsonPointer.compile this.path.map(transformKeysFn)
-        return
+      [transformKeysFn, compiledPointersKey] = @getPointerTransformKeys lowerCasedKeys
+      @buildDataRealPointers {transformKeysFn, compiledPointersKey}
 
       pathArrayTransformed = pathArray.map(transformKeysFn)
 
@@ -123,7 +136,7 @@ class Converter
           if @areArraysIdentical pathArrayTransformed, jsonPointer.parse(result['pointer'])
             errorPointer = result['pointer']
             # key is missing in real and is present in expected, so it's missing
-            if errorPointer not in dataRealPointers
+            if errorPointer not in @dataRealPointers[compiledPointersKey]
               if message
                 message = ' | ' + message
               message = result['message'] + message

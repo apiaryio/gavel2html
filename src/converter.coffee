@@ -68,23 +68,22 @@ class Converter
     state = 0
     message = ''
 
-    if lowerCasedKeys
-      transformKeys = @_lowerCaseIt
-    else
-      transformKeys = @_lambda
-
     if resultsCount
+      transformKeysFn = if lowerCasedKeys then @_lowerCaseIt else @_lambda
+
       dataRealPointers = []
       # get all pointers in expected data
       traverse(@dataReal).forEach (nodeValue) ->
-        dataRealPointers.push jsonPointer.compile this.path.map(transformKeys)
+        dataRealPointers.push jsonPointer.compile this.path.map(transformKeysFn)
         return
 
+      pathArrayTransformed = pathArray.map transformKeysFn
+
       for i in [0..resultsCount-1]
-        if @areArraysIdentical pathArray.map(transformKeys), @gavelResult.rawData[i]?['property'] or []
+        if @areArraysIdentical pathArrayTransformed, @gavelResult.rawData[i]?['property'] or []
           errorPointer = jsonPointer.compile(@gavelResult.rawData[i]?['property'] or [])
           # key is missing in real and is present in expected, so it's missing
-          if not (errorPointer in dataRealPointers)
+          if errorPointer not in dataRealPointers
             if message
               message = ' | ' + message
             message = @gavelResult.rawData[i]['message'] + message
@@ -108,24 +107,23 @@ class Converter
     state = 0
     message = ''
 
-    if lowerCasedKeys
-      transformKeys = @_lowerCaseIt
-    else
-      transformKeys = @_lambda
-
     if resultsCount
+      transformKeysFn = if lowerCasedKeys then @_lowerCaseIt else @_lambda
+
       dataRealPointers = []
       # get all pointers in expected data
       traverse(@dataReal).forEach (nodeValue) ->
-        dataRealPointers.push jsonPointer.compile this.path.map(transformKeys)
+        dataRealPointers.push jsonPointer.compile this.path.map(transformKeysFn)
         return
+
+      pathArrayTransformed = pathArray.map(transformKeysFn)
 
       for result in @gavelResult.results
         if result['pointer']? # filter out non json related errors
-          if @areArraysIdentical pathArray.map(transformKeys), jsonPointer.parse(result['pointer'])
+          if @areArraysIdentical pathArrayTransformed, jsonPointer.parse(result['pointer'])
             errorPointer = result['pointer']
             # key is missing in real and is present in expected, so it's missing
-            if not (errorPointer in dataRealPointers)
+            if errorPointer not in dataRealPointers
               if message
                 message = ' | ' + message
               message = result['message'] + message

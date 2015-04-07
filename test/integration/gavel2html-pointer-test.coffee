@@ -7,7 +7,7 @@ fixtures      = require '../fixtures/gavel2html-pointers'
 outputOptions = fixtures.gavel2htmlOutputOptions
 
 runTest = (test, gavelOptions) ->
-  describe test.testDesc , ->
+  describe test.testDesc, ->
     gavel2html = undefined
     output = undefined
     before (done) ->
@@ -28,7 +28,7 @@ describe 'Gavel2Html Tests with JSON pointer notation', ->
       do (test) ->
         outputOpts = clone outputOptions
         outputOpts.comments = false
-        runTest test, outputOpts
+        runTest clone(test), (test.outputOptions or outputOpts)
 
 
   describe 'body tests', ->
@@ -36,7 +36,6 @@ describe 'Gavel2Html Tests with JSON pointer notation', ->
       do (test) ->
         outputOpts = clone outputOptions
         outputOpts.comments = true
-        runTest test, outputOpts
-        runTest test, outputOpts
+        runTest clone(test), (test.outputOptions or outputOpts)
 
 

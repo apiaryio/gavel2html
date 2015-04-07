@@ -63,7 +63,7 @@ h.headersRealFailValueCase =
       "1":{"property":["testheader1"],"propertyValue":"'tEstHeader1Val'","attributeName":"enum","attributeValue":["'testHeader1Val'"],"message":"Value of the ‘testheader1’ must be 'testHeader1Val'.","validator":"enum","validatorName":"enum","validatorValue":["'testHeader1Val'"]},
       "length":2
     },"validator":"HeadersJsonExample"}
-  expectedOutput: "<wrapStart><changedStartTag>testHeader1: tEstHeader1Val</endTag> <commentStartTag>Value of the ‘testheader1’ must be 'testHeader1Val'.</commentEndTag><changedStartTag>testHeader2: testHEader2Val</endTag> <commentStartTag>Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><changedStartTag>testHeader1: tEstHeader1Val</endTag><changedStartTag>testHeader2: testHEader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealFailMiss =
@@ -77,7 +77,7 @@ h.headersRealFailMiss =
       "1":{"property":["testheader2"],"propertyValue":null,"attributeName":"required","attributeValue":true,"message":"The ‘testheader2’ property is required.","validator":"required","validatorName":"required","validatorValue":true},
       "length":2
     },"validator":"HeadersJsonExample"}
-  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><missingStartTag>testHeader2: testHeader2Val</endTag> <commentStartTag>The ‘testheader2’ property is required. | Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><missingStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealFailChanged =
@@ -91,7 +91,7 @@ h.headersRealFailChanged =
       "0":{"property":["testheader2"],"propertyValue":"'testHEader2ValChanged'","attributeName":"enum","attributeValue":["'testHeader2Val'"],"message":"Value of the ‘testheader2’ must be 'testHeader2Val'.","validator":"enum","validatorName":"enum","validatorValue":["'testHeader2Val'"]},
       "length":1
     },"validator":"HeadersJsonExample"}
-  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><changedStartTag>testHeader2: testHEader2ValChanged</endTag> <commentStartTag>Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><changedStartTag>testHeader2: testHEader2ValChanged</endTag><wrapEnd>"
 
   usedErrors: []
 
@@ -106,7 +106,7 @@ h.headersRealFailEmpty =
       "1":{"property":["testheader2"],"propertyValue":null,"attributeName":"required","attributeValue":true,"message":"The ‘testheader2’ property is required.","validator":"required","validatorName":"required","validatorValue":true},
       "length":2
     },"validator":"HeadersJsonExample"}
-  expectedOutput: "<wrapStart><missingStartTag>testHeader2: testHeader2Val</endTag> <commentStartTag>The ‘testheader2’ property is required. | Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><missingStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealOKNoEmpty =

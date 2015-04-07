@@ -7,7 +7,7 @@ fixtures      = require '../fixtures/gavel2html-legacy'
 outputOptions = fixtures.gavel2htmlOutputOptions
 
 runTest = (test, gavelOptions) ->
-  describe test.testDesc , ->
+  describe test.testDesc, ->
     gavel2html = undefined
     output = undefined
     before (done) ->
@@ -28,7 +28,7 @@ describe 'Gavel2Html Tests with legacy JSON property array notation', ->
       do (test) ->
         outputOpts = clone outputOptions
         outputOpts.comments = false
-        runTest test, (test.outputOptions or outputOpts)
+        runTest clone(test), (test.outputOptions or outputOpts)
 
 
   describe 'body tests', ->
@@ -36,5 +36,5 @@ describe 'Gavel2Html Tests with legacy JSON property array notation', ->
       do (test) ->
         outputOpts = clone outputOptions
         outputOpts.comments = true
-        runTest test, outputOpts
+        runTest clone(test), (test.outputOptions or outputOpts)
 

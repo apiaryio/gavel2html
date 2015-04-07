@@ -78,7 +78,7 @@ h.headersRealFailValueCase =
     ],
     "validator": "HeadersJsonExample"
   }
-  expectedOutput: "<wrapStart><changedStartTag>testHeader1: tEstHeader1Val</endTag> <commentStartTag>Value of the ‘testheader1’ must be 'testHeader1Val'.</commentEndTag><changedStartTag>testHeader2: testHEader2Val</endTag> <commentStartTag>Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><changedStartTag>testHeader1: tEstHeader1Val</endTag><changedStartTag>testHeader2: testHEader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealFailMiss =
@@ -101,7 +101,7 @@ h.headersRealFailMiss =
     ],
     "validator": "HeadersJsonExample"
   }
-  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><missingStartTag>testHeader2: testHeader2Val</endTag> <commentStartTag>The ‘testheader2’ property is required. | Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><missingStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealFailChanged =
@@ -120,7 +120,7 @@ h.headersRealFailChanged =
     ],
     "validator": "HeadersJsonExample"
   }
-  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><changedStartTag>testHeader2: testHEader2ValChanged</endTag> <commentStartTag>Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><changedStartTag>testHeader2: testHEader2ValChanged</endTag><wrapEnd>"
 
   usedErrors: []
 
@@ -144,7 +144,7 @@ h.headersRealFailEmpty =
     ],
     "validator": "HeadersJsonExample"
   }
-  expectedOutput: "<wrapStart><missingStartTag>testHeader2: testHeader2Val</endTag> <commentStartTag>The ‘testheader2’ property is required. | Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><missingStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealOKNoEmpty =

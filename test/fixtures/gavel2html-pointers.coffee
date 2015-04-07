@@ -160,6 +160,36 @@ h.headersRealOKNoEmpty =
   expectedOutput: '<wrapStart><addedStartTag>testHeader1: testHeader1Val</endTag><addedStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>'
   usedErrors: []
 
+headersWrapHeaderKeys =
+  testHeader1: '<b>testHeader1Val</b>'
+  testHeader2: '<i>testHeader2Val</i>'
+
+h.headersWrapKeys =
+  outputOptions:
+    wrapWith: '<wrapStart>##data<wrapEnd>'
+    startTag: '<startTag>'
+    endTag: '</endTag>'
+    jsonKeyStartTag: '<keyStart>'
+    jsonKeyEndTag: '</keyEnd>'
+    missingStartTag: '<missingStartTag>'
+    addedStartTag: "<addedStartTag>"
+    changedStartTag: '<changedStartTag>'
+    comments: false
+
+  testDesc: 'when expected headers are non empty and real data are the same in real headers and I want to wrap header keys'
+  dataReal: headersWrapHeaderKeys
+  dataExpected: headersWrapHeaderKeys
+  gavelResult: {
+    "results": []
+    'validator': 'HeadersJsonExample'
+  }
+  expectedOutput: """
+  <wrapStart>\
+  <startTag><keyStart>testHeader1</keyEnd>: &lt;b&gt;testHeader1Val&lt;/b&gt;</endTag>\
+  <startTag><keyStart>testHeader2</keyEnd>: &lt;i&gt;testHeader2Val&lt;/i&gt;</endTag>\
+  <wrapEnd>"""
+  usedErrors: []
+
 
 #
 # Body

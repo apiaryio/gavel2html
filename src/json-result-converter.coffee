@@ -6,7 +6,7 @@ Converter = require './converter'
 
 class JsonResultConverter extends Converter
   #@protected
-  getHtmlPrivate:  ->
+  getHtmlPrivate: ->
     out = ''
     prevLevel = 0
     prevNode = null
@@ -152,8 +152,8 @@ class JsonResultConverter extends Converter
 
 
   #@private
-  formatFragmentFunction: (thisInstance) -> ({fragment, message, status}) ->
-    thisInstance.formatFragment fragment: fragment, message: message, status: status
+  formatFragmentFunction: (thisInstance) -> (options) ->
+    thisInstance.formatFragment options
 
   #@private
   getIdentFunction: (identString) -> (level) ->

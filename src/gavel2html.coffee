@@ -22,17 +22,34 @@ class Gavel2Html
     @usedErrors   = []
 
 
-  getHtml: ({wrapWith, startTag, endTag, missingStartTag, addedStartTag, changedStartTag, comments, commentStartTag, commentEndTag, identString}) ->
+  getHtml: (givenOptions = {}) ->
+    {
+      wrapWith
+      startTag
+      endTag
+      jsonKeyStartTag
+      jsonKeyEndTag
+      missingStartTag
+      addedStartTag
+      changedStartTag
+      comments
+      commentStartTag
+      commentEndTag
+      identString
+    } = givenOptions
+
     options = {
-      wrapWith: wrapWith || '##data',
-      startTag: startTag || '<li>',
-      endTag: endTag  || '</li>',
-      missingStartTag: missingStartTag,
-      addedStartTag: addedStartTag,
-      changedStartTag: changedStartTag,
-      comments: comments,
-      commentStartTag: commentStartTag,
-      commentEndTag: commentEndTag,
+      missingStartTag
+      addedStartTag
+      changedStartTag
+      comments
+      commentStartTag
+      commentEndTag
+      wrapWith: wrapWith || '##data'
+      startTag: startTag || '<li>'
+      endTag: endTag || '</li>'
+      jsonKeyStartTag: jsonKeyStartTag || ''
+      jsonKeyEndTag: jsonKeyEndTag || ''
       identString: identString || '  '
     }
 
@@ -40,13 +57,13 @@ class Gavel2Html
 
     try
       result = converter.getHtml options
-      @usedErrors   = converter.usedErrors
+      @usedErrors = converter.usedErrors
       return result
     catch e
       html = missingStartTag + "Internal validator error\n\n" + endTag
       try
         if typeof(@dataReal) != 'string'
-          @dataReal  = JSON.stringify @dataReal
+          @dataReal = JSON.stringify @dataReal
       catch e
         false
 

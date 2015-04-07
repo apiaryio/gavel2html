@@ -49,8 +49,21 @@ class HeadersResultConverter extends Converter
 
     html = ''
 
+    canOmitSanitize = @jsonKeyEndTag and @jsonKeyStartTag
+
     for line in lines
-      html += @formatFragment {fragment: "#{line['pathArray']}: #{line['value']}", message: line['message'], status: line['state']}
+      lineKey = line['pathArray']
+      lineVal = line['value']
+      if canOmitSanitize
+        lineKey = @sanitize lineKey
+        lineVal = @sanitize lineVal
+
+      html += @formatFragment {
+        omitSanitize: canOmitSanitize
+        fragment: "#{@jsonKeyStartTag or ''}#{lineKey}#{@jsonKeyEndTag or ''}: #{lineVal}"
+        message: line['message']
+        status: line['state']
+      }
 
     return html
 

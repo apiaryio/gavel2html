@@ -154,7 +154,7 @@ h.headersWrapKeys =
 # Body
 #
 
-b  = {}
+b = {}
 
 b.bodyTypeFailFailIntVsStringRoot =
   testDesc: 'when expected body is integer and real is string'

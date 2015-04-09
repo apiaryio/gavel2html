@@ -25,6 +25,7 @@ class JsonResultConverter extends Converter
     getIdent = @getIdentFunction @identString
     formatFragment = @formatFragmentFunction @
     formatParts = @formatFragmentPartsFunction @
+    sanitizeData = @sanitize.bind @
     usedErrors = @usedErrors
 
     for error in errors
@@ -36,9 +37,6 @@ class JsonResultConverter extends Converter
 
     writtenStart = false
     writtenEnd = false
-
-    # findErrorForNode = (path, isRoot, nodeValue) ->
-    console.log 'walk it'
 
     defaultStart = '<startTag>'
     defaultEnd = '<endTag>'
@@ -60,9 +58,13 @@ class JsonResultConverter extends Converter
 
     walking = (node) ->
       errorOnThisPath = null
-      compiledPath = jsonPointer.compile(@path)
+      compiledPath = null
+      if @path
+        compiledPath = jsonPointer.compile(@path)
 
-      if !@isNotRoot or (@isRoot and (typeof node) in ['number', 'string'])
+      if not @path
+        compiledPath = compiledPath
+      else if not @isRoot or (@isRoot and typeof(node) in ['number', 'string'])
         errNo = errorsMap[compiledPath]
         if errNo or errNo == 0
           errorOnThisPath = errors[errNo]
@@ -70,7 +72,6 @@ class JsonResultConverter extends Converter
             usedErrors.push compiledPath
 
       if errorOnThisPath?
-        console.log 'Error on this path', "_#{compiledPath}_"
         out[compiledPath] = formatParts {
           status: errorOnThisPath.state ? 0
           message: errorOnThisPath.message?.replace('The undefined property', 'The property')
@@ -93,7 +94,7 @@ class JsonResultConverter extends Converter
           pointerHere = jsonPointer.compile [].concat(@path).concat key
           writeStart out[pointerHere], getIdent(indentLevel)
           return
-        @post (child, key) ->
+        @post (child) ->
           pointerHere = jsonPointer.compile [].concat(@path).concat child.path
           if !child.isLast
             s += ','
@@ -123,7 +124,7 @@ class JsonResultConverter extends Converter
           s += ': '
           return
         @post (child) ->
-          pointerHere = jsonPointer.compile [].concat(@path).concat key
+          pointerHere = jsonPointer.compile [].concat(@path).concat child.path
           if !child.isLast
             s += ','
           writeEnd out[pointerHere], true

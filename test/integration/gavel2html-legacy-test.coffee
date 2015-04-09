@@ -31,7 +31,7 @@ describe 'Gavel2Html Tests with legacy JSON property array notation', ->
         runTest clone(test), (test.outputOptions or outputOpts)
 
 
-  describe 'body tests', ->
+  describe.only 'body tests', ->
     for name, test of fixtures.testsBody
       do (test) ->
         outputOpts = clone outputOptions

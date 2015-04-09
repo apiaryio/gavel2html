@@ -207,9 +207,10 @@ b.bodyTypeFailPrimitiveVsObjRoot =
       "length":1
     },"validator":"JsonSchema"}
   expectedOutput: '''
-         <wrapStart>{
-         <addedStartTag>&quot;key&quot;: &quot;val&quot;</endTag>
-         }
+         <wrapStart>
+         <startTag>{</endTag>
+         <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
+         <startTag>}</endTag>
          <wrapEnd>
   '''
   usedErrors: []

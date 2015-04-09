@@ -21,135 +21,151 @@ class JsonResultConverter extends Converter
     @usedErrors = []
     errorsMap = @mapErrorsPositionByPath errors
 
-    #traverse breaking context aagggrrrrr.....
+    # traverse breaking context aagggrrrrr.....
     getIdent = @getIdentFunction @identString
     formatFragment = @formatFragmentFunction @
-
+    formatParts = @formatFragmentPartsFunction @
     usedErrors = @usedErrors
 
     for error in errors
       errorsPaths.push jsonPointer.compile error.pathArray
 
-    traverse(@dataReal).forEach (nodeValue) ->
-      openingBracket = ''
-      errorOnThisPath = null
-      closingBracketsStr = ''
+    s = ''
+    indentLevel = 1
+    out = {}
 
-      if (prevLevel > this.level) and closingBrackets.length
-        for i in [this.level..prevLevel-1]
-          closingBracketsStr += getIdent(prevLevel-i+1) + closingBrackets.pop()
+    writtenStart = false
+    writtenEnd = false
 
-          if typesOnLevels[prevLevel-i+1] == 'array'
-            # remove last newline char
-            closingBracketsStr = closingBracketsStr.substring(0, closingBracketsStr.length - 1)
-            closingBracketsStr += ",\n"
+    # findErrorForNode = (path, isRoot, nodeValue) ->
+    console.log 'walk it'
 
-          else if typesOnLevels[prevLevel-i+1] == 'object' and typesOnLevels[prevLevel-i] == 'array'
-            # remove last newline char
-            closingBracketsStr = closingBracketsStr.substring(0, closingBracketsStr.length - 1)
-            closingBracketsStr += ",\n"
+    defaultStart = '<startTag>'
+    defaultEnd = '<endTag>'
 
-      typeOfNodeValue = null
-      hasKeys = false
-      if type.array nodeValue
-        typeOfNodeValue = 'array'
-        firstChar = '['
-        lastChar = ']'
-        if nodeValue.length
-          hasKeys = true
-      else if type.object nodeValue
-        typeOfNodeValue = 'object'
-        firstChar = '{'
-        lastChar = '}'
-        for own k, v of nodeValue
-          hasKeys = true
-          break
-
-      if hasKeys and typeOfNodeValue
-        openingBracket += getIdent(this.level) + firstChar
-        closingBrackets.push "#{lastChar}\n"
-        typesOnLevels[this.level+1] = typeOfNodeValue
-
-
-      if this.isRoot
-        format = false
-        if typeof nodeValue is 'number'
-          out +=  "#{nodeValue}"
-          format = true
-        else if typeof nodeValue is 'string'
-          out += "\"#{nodeValue}\""
-          format = true
-        else if openingBracket
-          out = openingBracket + "\n"
-
-
-        if format
-          errNo = errorsMap[jsonPointer.compile this.path]
-
-          if errNo or errNo is 0
-            errorOnThisPath = errors[errNo]
-            if errorOnThisPath.state != 1 #added
-              usedErrors.push jsonPointer.compile this.path
-
-          if errorOnThisPath
-            out = formatFragment fragment: out, message: errorOnThisPath.message?.replace('The undefined property', 'The property') , status: errorOnThisPath.state
-          else
-            out = formatFragment fragment: out, message: undefined, status: 0
-
-      else
-        if typesOnLevels[this.level] == 'array'
-          key = ''
-        else
-          key = '"' + this.key + '": '
-
-        keyValuePair =  getIdent(this.level) + key + "#{openingBracket}"
-
-        if this.isLeaf
-          if typeof nodeValue is 'number'
-            keyValuePair += nodeValue
-          else if Array.isArray nodeValue
-            keyValuePair += JSON.stringify nodeValue
-          else if typeof(nodeValue) == 'object'
-            keyValuePair += JSON.stringify nodeValue
-          else
-            keyValuePair += '"' + nodeValue + '"'
-
-        errNo = errorsMap[jsonPointer.compile this.path]
-
-        if errNo or errNo is 0
-          errorOnThisPath = errors[errNo]
-          if errorOnThisPath.state != 1 #added
-            usedErrors.push jsonPointer.compile this.path
-
-        if errorOnThisPath
-          keyValuePair = formatFragment fragment: keyValuePair, message: errorOnThisPath.message?.replace('The undefined property', 'The property'), status: errorOnThisPath.state
-        else
-          keyValuePair = formatFragment fragment: keyValuePair, message: undefined, status: 0
-
-        if closingBracketsStr
-          out += getIdent(this.level-1) + "#{closingBracketsStr}"
-
-        # append comma if parent is array
-        if typesOnLevels[this.level] == 'array' and typeof(nodeValue) != 'object'
-          if parseInt(this.key) != this.parent.node.length - 1
-            keyValuePair += ","
-
-        out += keyValuePair + "\n"
-
-      prevLevel = this.level
-      prevNode = this.node
-
+    writeStart = (pieces = [defaultStart], indentation = '') ->
+      if not writtenStart
+        s += pieces[0] + indentation
+        pieces[0] = defaultStart # reset back to default, because Array/Object ends
+        writtenEnd = not writtenStart = true
       return
 
-    if prevLevel
-      for i in [0..prevLevel-1]
-        out += getIdent(prevLevel-i) + closingBrackets.pop()
+    writeEnd = (pieces = [defaultStart, [defaultEnd]], newline = false) ->
+      if not writtenEnd
+        s += "#{pieces[1].join(' ')}#{if newline then '\n' else ''}"
+        # pieces[0] = defaultStart
+        pieces[1] = [pieces[1][0]]
+        writtenStart = not writtenEnd = true
+      return
 
+    walking = (node) ->
+      errorOnThisPath = null
+      compiledPath = jsonPointer.compile(@path)
+
+      if !@isNotRoot or (@isRoot and (typeof node) in ['number', 'string'])
+        errNo = errorsMap[compiledPath]
+        if errNo or errNo == 0
+          errorOnThisPath = errors[errNo]
+          if errorOnThisPath.state != 1 # not added
+            usedErrors.push compiledPath
+
+      if errorOnThisPath?
+        console.log 'Error on this path', "_#{compiledPath}_"
+        out[compiledPath] = formatParts {
+          status: errorOnThisPath.state ? 0
+          message: errorOnThisPath.message?.replace('The undefined property', 'The property')
+        }
+      else
+        out[compiledPath] = formatParts {
+          status: 0
+        }
+
+      if Array.isArray(node)
+        @before ->
+          if @isRoot
+            writeStart out[compiledPath]
+          s += '['
+          if not @isLeaf
+            indentLevel = indentLevel + 1
+            writeEnd out[compiledPath], true
+          return
+        @pre (x, key) ->
+          pointerHere = jsonPointer.compile [].concat(@path).concat key
+          writeStart out[pointerHere], getIdent(indentLevel)
+          return
+        @post (child, key) ->
+          pointerHere = jsonPointer.compile [].concat(@path).concat child.path
+          if !child.isLast
+            s += ','
+          writeEnd out[pointerHere], true
+          return
+        @after ->
+          if not @isLeaf
+            indentLevel = (indentLevel - 1) or 1
+            writeStart out[compiledPath], getIdent(indentLevel)
+          s += ']'
+          if @isRoot
+            writeEnd out[compiledPath]
+          return
+      else if typeof node == 'object'
+        @before ->
+          if @isRoot
+            writeStart(out[compiledPath])
+          s += '{'
+          if not @isLeaf
+            indentLevel = indentLevel + 1
+            writeEnd out[compiledPath], true
+          return
+        @pre (x, key) ->
+          pointerHere = jsonPointer.compile [].concat(@path).concat key
+          writeStart out[compiledPath], getIdent(indentLevel)
+          walking key
+          s += ': '
+          return
+        @post (child) ->
+          pointerHere = jsonPointer.compile [].concat(@path).concat key
+          if !child.isLast
+            s += ','
+          writeEnd out[pointerHere], true
+          return
+        @after ->
+          if not @isLeaf
+            indentLevel = (indentLevel - 1) or 1
+            writeStart(out[compiledPath], getIdent(indentLevel))
+          s += '}'
+          if @isRoot
+            writeEnd out[compiledPath]
+          return
+      else if typeof node == 'string'
+        if @isRoot
+          writeStart(out[''])
+        if Array.isArray(@parent)
+          s += getIdent(indentLevel)
+        s += '"' + node.toString().replace(/"/g, '\"') + '"'
+        if @isRoot
+          writeEnd(out[''])
+      else
+        if @isRoot
+          writeStart(out[''])
+        if Array.isArray(@parent)
+          s += getIdent(indentLevel)
+        s += node.toString()
+        if @isRoot
+          writeEnd(out[''])
+      return
+
+    traverse(@dataReal).forEach walking
+
+    console.log "out = vvvvv\n#{s}"
+    console.log '^^^^'
     @usedErrors = usedErrors
 
-    return out
+    return s
 
 
+  #@private
+  formatFragmentPartsFunction: (thisInstance) -> (options) ->
+    thisInstance.formatFragmentParts options
 
   #@private
   formatFragmentFunction: (thisInstance) -> (options) ->

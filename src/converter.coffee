@@ -40,6 +40,8 @@ class Converter
       @identString
     } = options
 
+    @outputs = [@missingStartTag, @startTag, @addedStartTag, @changedStartTag]
+
     html = @getHtmlPrivate()
 
     if @wrapWith
@@ -50,6 +52,19 @@ class Converter
   #@private
   getHtmlPrivate: ->
     throw new Error 'getHtmlPrivate: not implemented. Must be implemented in subclass'
+
+
+  formatFragmentParts: ({message, status}) ->
+    out = [
+      @outputs[1 * (status or 0) + 1] or ''
+      [@endTag]
+    ]
+
+    if @comments and message
+      out[1].push "#{@commentStartTag}#{message}#{@commentEndTag}"
+
+    return out
+
 
   #@private
   formatFragment: ({fragment, message, status, omitSanitize}) ->

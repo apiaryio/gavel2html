@@ -23,7 +23,6 @@ class JsonResultConverter extends Converter
 
     # traverse breaking context aagggrrrrr.....
     getIdent = @getIdentFunction @identString
-    formatFragment = @formatFragmentFunction @
     formatParts = @formatFragmentPartsFunction @
     sanitizeData = @sanitize.bind @
     usedErrors = @usedErrors
@@ -152,8 +151,6 @@ class JsonResultConverter extends Converter
       else if typeof node == 'string'
         if @isRoot
           writeStart(out[compiledPath])
-        if Array.isArray(@parent)
-          s += getIdent(indentLevel)
         s += '&quot;' # sanitizeData('"')
         s += preStringValue if preStringValue
         s += sanitizeData(node.toString().replace(/"/g, '\"'))
@@ -164,8 +161,6 @@ class JsonResultConverter extends Converter
       else
         if @isRoot
           writeStart(out[compiledPath])
-        if Array.isArray(@parent)
-          s += getIdent(indentLevel)
         s += sanitizeData node.toString()
         if @isRoot
           writeEnd(out[compiledPath])
@@ -182,10 +177,6 @@ class JsonResultConverter extends Converter
   #@private
   formatFragmentPartsFunction: (thisInstance) -> (options) ->
     thisInstance.formatFragmentParts options
-
-  #@private
-  formatFragmentFunction: (thisInstance) -> (options) ->
-    thisInstance.formatFragment options
 
   #@private
   getIdentFunction: (identString) -> (level) ->

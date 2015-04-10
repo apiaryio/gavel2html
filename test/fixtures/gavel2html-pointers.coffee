@@ -766,7 +766,7 @@ b.bodyOkWithNestedStringsInArraysWrappedKeys =
     "login": "true"
     "results": [
       "BooBoo"
-      "MrauMrau"
+      5
       "BauBau"
     ]
   }
@@ -774,7 +774,7 @@ b.bodyOkWithNestedStringsInArraysWrappedKeys =
     "login": "true"
     "results": [
       "BooBoo"
-      "MrauMrau"
+      5
       "BauBau"
     ]
   }
@@ -787,7 +787,7 @@ b.bodyOkWithNestedStringsInArraysWrappedKeys =
   <startTag>  &quot;<keyStart>login</keyEnd>&quot;: &quot;true&quot;,</endTag>
   <startTag>  &quot;<keyStart>results</keyEnd>&quot;: [</endTag>
   <startTag>    &quot;BooBoo&quot;,</endTag>
-  <startTag>    &quot;MrauMrau&quot;,</endTag>
+  <startTag>    5,</endTag>
   <startTag>    &quot;BauBau&quot;</endTag>
   <startTag>  ]</endTag>
   <startTag>}</endTag><wrapEnd>

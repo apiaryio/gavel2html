@@ -40,6 +40,8 @@ class JsonResultConverter extends Converter
 
     defaultStart = "#{@startTag}"
     defaultEnd = "#{@endTag}"
+    keyTagWrapStart = "#{@jsonKeyStartTag or ''}"
+    keyTagWrapEnd = "#{@jsonKeyEndTag or ''}"
 
     writeStart = (pieces = [defaultStart], indentation = '') ->
       if not writtenStart
@@ -77,7 +79,7 @@ class JsonResultConverter extends Converter
         }
       return
 
-    walking = (node) ->
+    walking = (node, preStringValue, postStringValue) ->
       compiledPath = null
       if @path
         compiledPath = jsonPointer.compile(@path)
@@ -129,7 +131,7 @@ class JsonResultConverter extends Converter
           pointerHere = jsonPointer.compile [].concat(@path).concat key
           findErrorsByPointerPath pointerHere
           writeStart out[pointerHere], getIdent(indentLevel)
-          walking key
+          walking key, keyTagWrapStart, keyTagWrapEnd
           s += ': '
           return
         @post (child) ->
@@ -152,7 +154,11 @@ class JsonResultConverter extends Converter
           writeStart(out[compiledPath])
         if Array.isArray(@parent)
           s += getIdent(indentLevel)
-        s += sanitizeData('"' + node.toString().replace(/"/g, '\"') + '"')
+        s += '&quot;' # sanitizeData('"')
+        s += preStringValue if preStringValue
+        s += sanitizeData(node.toString().replace(/"/g, '\"'))
+        s += postStringValue if postStringValue
+        s += '&quot;' # sanitizeData('"')
         if @isRoot
           writeEnd(out[compiledPath])
       else

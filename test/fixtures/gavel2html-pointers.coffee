@@ -758,6 +758,55 @@ b.bodyOkWithNestedArraysInArrays =
   """
   usedErrors: []
 
+
+
+b.bodyOkWithNestedStringsInArraysWrappedKeys =
+  testDesc: 'when expected and real body are the same and I want to wrap object keys in additional tags'
+  dataReal: JSON.stringify {
+    "login": "true"
+    "results": [
+      "BooBoo"
+      "MrauMrau"
+      "BauBau"
+    ]
+  }
+  dataExpected: JSON.stringify {
+    "login": "true"
+    "results": [
+      "BooBoo"
+      "MrauMrau"
+      "BauBau"
+    ]
+  }
+  gavelResult: {
+    "results": [],
+    "validator": "JsonExample"
+  }
+  expectedOutput: """
+  <wrapStart><startTag>{</endTag>
+  <startTag>  &quot;<keyStart>login</keyEnd>&quot;: &quot;true&quot;,</endTag>
+  <startTag>  &quot;<keyStart>results</keyEnd>&quot;: [</endTag>
+  <startTag>    &quot;BooBoo&quot;,</endTag>
+  <startTag>    &quot;MrauMrau&quot;,</endTag>
+  <startTag>    &quot;BauBau&quot;</endTag>
+  <startTag>  ]</endTag>
+  <startTag>}</endTag><wrapEnd>
+  """
+  usedErrors: []
+  outputOptions:
+    jsonKeyStartTag: "<keyStart>"
+    jsonKeyEndTag: "</keyEnd>"
+    wrapWith: '<wrapStart>##data<wrapEnd>'
+    startTag: '<startTag>'
+    endTag: '</endTag>'
+    missingStartTag: '<missingStartTag>'
+    addedStartTag: "<addedStartTag>"
+    changedStartTag: '<changedStartTag>'
+    comments: true
+    commentStartTag: '<commentStartTag>'
+    commentEndTag: '</commentEndTag>'
+
+
 module.exports = {
   gavel2htmlOutputOptions
   testsHeaders: h

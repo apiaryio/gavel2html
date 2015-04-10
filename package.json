@@ -29,14 +29,14 @@
   "homepage": "https://github.com/apiaryio/gavel2html",
   "devDependencies": {
     "chai": "^1.10.0",
-    "coffee-script": "^1.8.0",
-    "mocha": "^2.0.1"
+    "coffee-script": "^1.9.1",
+    "mocha": "^2.2.4"
   },
   "dependencies": {
-    "clone": "^0.2.0",
+    "clone": "^1.0.2",
     "googlediff": "^0.1.0",
     "is-type": "~0.0.1",
-    "json-pointer": "^0.2.2",
+    "json-pointer": "^0.3.0",
     "traverse": "^0.6.6"
   }
 }

@@ -55,8 +55,9 @@ class Converter
 
 
   formatFragmentParts: ({message, status}) ->
+    status ?= 0
     out = [
-      @outputs[1 * (status or 0) + 1] or ''
+      "#{@outputs[1 * (status or 0) + 1] or ''}"
       [@endTag]
     ]
 

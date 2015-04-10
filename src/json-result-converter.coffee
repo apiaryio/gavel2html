@@ -38,8 +38,8 @@ class JsonResultConverter extends Converter
     writtenStart = false
     writtenEnd = false
 
-    defaultStart = '<startTag>'
-    defaultEnd = '<endTag>'
+    defaultStart = "#{@startTag}"
+    defaultEnd = "#{@endTag}"
 
     writeStart = (pieces = [defaultStart], indentation = '') ->
       if not writtenStart
@@ -56,30 +56,36 @@ class JsonResultConverter extends Converter
         writtenStart = not writtenEnd = true
       return
 
-    walking = (node) ->
+    findErrorsByPointerPath = (pointerPath) ->
       errorOnThisPath = null
+      if out[pointerPath]? or not pointerPath?
+        return
+      errNo = errorsMap[pointerPath]
+      if errNo or errNo == 0
+        errorOnThisPath = errors[errNo]
+        if errorOnThisPath.state != 1 # not added
+          usedErrors.push pointerPath
+
+      if errorOnThisPath? and pointerPath?
+        out[pointerPath] = formatParts {
+          status: errorOnThisPath.state
+          message: errorOnThisPath.message?.replace('The undefined property', 'The property')
+        }
+      else
+        out[pointerPath] = formatParts {
+          status: 0
+        }
+      return
+
+    walking = (node) ->
       compiledPath = null
       if @path
         compiledPath = jsonPointer.compile(@path)
 
-      if not @path
+      if not @path?
         compiledPath = compiledPath
       else if not @isRoot or (@isRoot and typeof(node) in ['number', 'string'])
-        errNo = errorsMap[compiledPath]
-        if errNo or errNo == 0
-          errorOnThisPath = errors[errNo]
-          if errorOnThisPath.state != 1 # not added
-            usedErrors.push compiledPath
-
-      if errorOnThisPath?
-        out[compiledPath] = formatParts {
-          status: errorOnThisPath.state ? 0
-          message: errorOnThisPath.message?.replace('The undefined property', 'The property')
-        }
-      else
-        out[compiledPath] = formatParts {
-          status: 0
-        }
+        findErrorsByPointerPath compiledPath
 
       if Array.isArray(node)
         @before ->
@@ -92,10 +98,12 @@ class JsonResultConverter extends Converter
           return
         @pre (x, key) ->
           pointerHere = jsonPointer.compile [].concat(@path).concat key
+          findErrorsByPointerPath pointerHere
           writeStart out[pointerHere], getIdent(indentLevel)
           return
         @post (child) ->
           pointerHere = jsonPointer.compile [].concat(@path).concat child.path
+          findErrorsByPointerPath pointerHere
           if !child.isLast
             s += ','
           writeEnd out[pointerHere], true
@@ -119,12 +127,14 @@ class JsonResultConverter extends Converter
           return
         @pre (x, key) ->
           pointerHere = jsonPointer.compile [].concat(@path).concat key
-          writeStart out[compiledPath], getIdent(indentLevel)
+          findErrorsByPointerPath pointerHere
+          writeStart out[pointerHere], getIdent(indentLevel)
           walking key
           s += ': '
           return
         @post (child) ->
           pointerHere = jsonPointer.compile [].concat(@path).concat child.path
+          findErrorsByPointerPath pointerHere
           if !child.isLast
             s += ','
           writeEnd out[pointerHere], true
@@ -139,26 +149,25 @@ class JsonResultConverter extends Converter
           return
       else if typeof node == 'string'
         if @isRoot
-          writeStart(out[''])
+          writeStart(out[compiledPath])
         if Array.isArray(@parent)
           s += getIdent(indentLevel)
-        s += '"' + node.toString().replace(/"/g, '\"') + '"'
+        s += sanitizeData('"' + node.toString().replace(/"/g, '\"') + '"')
         if @isRoot
-          writeEnd(out[''])
+          writeEnd(out[compiledPath])
       else
         if @isRoot
-          writeStart(out[''])
+          writeStart(out[compiledPath])
         if Array.isArray(@parent)
           s += getIdent(indentLevel)
-        s += node.toString()
+        s += sanitizeData node.toString()
         if @isRoot
-          writeEnd(out[''])
+          writeEnd(out[compiledPath])
       return
 
     traverse(@dataReal).forEach walking
 
-    console.log "out = vvvvv\n#{s}"
-    console.log '^^^^'
+    # console.log "\n#{s}\n"
     @usedErrors = usedErrors
 
     return s

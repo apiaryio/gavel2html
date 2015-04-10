@@ -207,11 +207,9 @@ b.bodyTypeFailPrimitiveVsObjRoot =
       "length":1
     },"validator":"JsonSchema"}
   expectedOutput: '''
-         <wrapStart>
-         <startTag>{</endTag>
+         <wrapStart><startTag>{</endTag>
          <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
-         <startTag>}</endTag>
-         <wrapEnd>
+         <startTag>}</endTag><wrapEnd>
   '''
   usedErrors: []
 
@@ -230,7 +228,8 @@ b.bodyTypeFailObjVsPrimitiveRoot =
       "0":{"property":[],"propertyValue":1,"attributeName":"type","attributeValue":"object","message":"The  property must be an object (current value is 1).","validator":"type","validatorName":"type","validatorValue":"object"},
       "length":1
     },"validator":"JsonSchema"}
-  expectedOutput: '<wrapStart><changedStartTag>1</endTag> <commentStartTag>The  property must be an object (current value is 1).</commentEndTag><wrapEnd>'
+  expectedOutput: '''
+    <wrapStart><changedStartTag>1</endTag> <commentStartTag>The  property must be an object (current value is 1).</commentEndTag><wrapEnd>'''
   usedErrors: [""]
 
 
@@ -246,12 +245,11 @@ b.bodyTypeFailObjVsArrayRoot =
   }
   gavelResult: {"rawData":{"0":{"property":[],"propertyValue":[1,2,3],"attributeName":"type","attributeValue":"object","message":"The  property must be an object (current value is [1,2,3]).","validator":"type","validatorName":"type","validatorValue":"object"},"length":1},"validator":"JsonSchema"}
   expectedOutput: '''
-                  <wrapStart>[
-                  <addedStartTag>1</endTag>,
-                  <addedStartTag>2</endTag>,
-                  <addedStartTag>3</endTag>
-                  ]
-                  <wrapEnd>
+                  <wrapStart><startTag>[</endTag>
+                  <addedStartTag>  1,</endTag>
+                  <addedStartTag>  2,</endTag>
+                  <addedStartTag>  3</endTag>
+                  <startTag>]</endTag><wrapEnd>
                   '''
   usedErrors: []
 
@@ -266,12 +264,11 @@ b.bodyTypeFailObjVsArrayRootNoSchema =
       "length":2
     },"validator":"JsonExample","expectedType":"application/json","realType":"application/json","results":[{"message":"The  property must be an object (current value is [1,2,3]).","severity":"error","pointer":"/"},{"message":"The ‘key’ property is required.","severity":"error","pointer":"/key"}]}
   expectedOutput: '''
-                  <wrapStart>[
-                  <addedStartTag>1</endTag>,
-                  <addedStartTag>2</endTag>,
-                  <addedStartTag>3</endTag>
-                  ]
-                  <wrapEnd>
+                  <wrapStart><startTag>[</endTag>
+                  <addedStartTag>  1,</endTag>
+                  <addedStartTag>  2,</endTag>
+                  <addedStartTag>  3</endTag>
+                  <startTag>]</endTag><wrapEnd>
                   '''
   usedErrors: []
 
@@ -286,10 +283,9 @@ b.bodyTypeFailArrayVsObjRoot =
   }
   gavelResult: {"rawData":{"0":{"property":[],"propertyValue":{"key":"val"},"attributeName":"type","attributeValue":"array","message":"The  property must be an array (current value is {\"key\":\"val\"}).","validator":"type","validatorName":"type","validatorValue":"array"},"length":1},"validator":"JsonSchema"}
   expectedOutput: '''
-                  <wrapStart>{
-                  <addedStartTag>&quot;key&quot;: &quot;val&quot;</endTag>
-                  }
-                  <wrapEnd>
+                  <wrapStart><startTag>{</endTag>
+                  <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
+                  <startTag>}</endTag><wrapEnd>
                   '''
   usedErrors: []
 
@@ -306,10 +302,9 @@ b.bodyTypeFailArrayVsObjRootNoSchema =
       "length":4
     },"validator":"JsonExample","expectedType":"application/json","realType":"application/json","results":[{"message":"The  property must be an array (current value is {\"key\":\"val\"}).","severity":"error","pointer":"/"},{"message":"The ‘0’ property is required.","severity":"error","pointer":"/0"},{"message":"The ‘1’ property is required.","severity":"error","pointer":"/1"},{"message":"The ‘2’ property is required.","severity":"error","pointer":"/2"}]}
   expectedOutput: '''
-                  <wrapStart>{
-                  <addedStartTag>&quot;key&quot;: &quot;val&quot;</endTag>
-                  }
-                  <wrapEnd>
+                  <wrapStart><startTag>{</endTag>
+                  <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
+                  <startTag>}</endTag><wrapEnd>
                   '''
   usedErrors: []
 
@@ -369,36 +364,35 @@ b.bodyComplex =
       "length":9
     },"validator":"JsonExample"}
   expectedOutput: '''
-                  <wrapStart>{
-                  <startTag>&quot;simpleKeyValueOK&quot;: &quot;simpleKeyValueOK&quot;</endTag>
-                  <startTag>&quot;simpleKeyValueNumberOK&quot;: 1</endTag>
-                  <startTag>&quot;keyWithObjectValueOK&quot;: {</endTag>
-                  <startTag>  &quot;keyWithObjectValueOKnestedKey&quot;: &quot;keyWithObjectValueOKnestedKey&quot;</endTag>
-                  <startTag>  &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
-                    }
-                  <startTag>&quot;keyWithObjectValueFail&quot;: {</endTag>
-                  <startTag>  &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
-                    }
-                  <changedStartTag>&quot;keyWithObjectValueWrongTypeFail&quot;: [</endTag> <commentStartTag>The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).</commentEndTag>
-                  <addedStartTag>  1</endTag>,
-                  <addedStartTag>  2</endTag>,
-                  <addedStartTag>  3</endTag>
-                    ],
-                  <startTag>&quot;keyWithArrayValueOK&quot;: [</endTag>
-                  <startTag>  1</endTag>,
-                  <startTag>  2</endTag>,
-                  <startTag>  3</endTag>
-                    ],
-                  <startTag>&quot;keyWithArrayValueOK2&quot;: [</endTag>
-                  <startTag>  4</endTag>,
-                  <startTag>  5</endTag>,
-                  <startTag>  6</endTag>
-                    ],
-                  <changedStartTag>&quot;keyWithArrayValueTypeFail&quot;: {</endTag> <commentStartTag>The keyWithArrayValueTypeFail property must be an array (current value is {"key":"val"}).</commentEndTag>
-                  <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
-                    }
-                  }
-                  <wrapEnd>
+                  <wrapStart><startTag>{</endTag>
+                  <startTag>  &quot;simpleKeyValueOK&quot;: &quot;simpleKeyValueOK&quot;,</endTag>
+                  <startTag>  &quot;simpleKeyValueNumberOK&quot;: 1,</endTag>
+                  <startTag>  &quot;keyWithObjectValueOK&quot;: {</endTag>
+                  <startTag>    &quot;keyWithObjectValueOKnestedKey&quot;: &quot;keyWithObjectValueOKnestedKey&quot;,</endTag>
+                  <startTag>    &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
+                  <startTag>  },</endTag>
+                  <startTag>  &quot;keyWithObjectValueFail&quot;: {</endTag>
+                  <startTag>    &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
+                  <startTag>  },</endTag>
+                  <changedStartTag>  &quot;keyWithObjectValueWrongTypeFail&quot;: [</endTag> <commentStartTag>The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).</commentEndTag>
+                  <addedStartTag>    1,</endTag>
+                  <addedStartTag>    2,</endTag>
+                  <addedStartTag>    3</endTag>
+                  <startTag>  ],</endTag>
+                  <startTag>  &quot;keyWithArrayValueOK&quot;: [</endTag>
+                  <startTag>    1,</endTag>
+                  <startTag>    2,</endTag>
+                  <startTag>    3</endTag>
+                  <startTag>  ],</endTag>
+                  <startTag>  &quot;keyWithArrayValueOK2&quot;: [</endTag>
+                  <startTag>    4,</endTag>
+                  <startTag>    5,</endTag>
+                  <startTag>    6</endTag>
+                  <startTag>  ],</endTag>
+                  <changedStartTag>  &quot;keyWithArrayValueTypeFail&quot;: {</endTag> <commentStartTag>The keyWithArrayValueTypeFail property must be an array (current value is {"key":"val"}).</commentEndTag>
+                  <addedStartTag>    &quot;key&quot;: &quot;val&quot;</endTag>
+                  <startTag>  }</endTag>
+                  <startTag>}</endTag><wrapEnd>
                   '''
   usedErrors: [
     "/keyWithObjectValueWrongTypeFail",
@@ -428,24 +422,23 @@ b.bodyOkWithNestedObjectsInArrays =
       "length":0
     },"validator":"JsonExample"}
   expectedOutput: """
-<wrapStart>{
-<startTag>&quot;login&quot;: &quot;true&quot;</endTag>
-<startTag>&quot;results&quot;: [</endTag>
+<wrapStart><startTag>{</endTag>
+<startTag>  &quot;login&quot;: &quot;true&quot;,</endTag>
+<startTag>  &quot;results&quot;: [</endTag>
 <startTag>    {</endTag>
-<startTag>    &quot;otrkey&quot;: &quot;20_jahre_feste&quot;</endTag>
-<startTag>    &quot;key2&quot;: &quot;value2&quot;</endTag>
-  },
+<startTag>      &quot;otrkey&quot;: &quot;20_jahre_feste&quot;,</endTag>
+<startTag>      &quot;key2&quot;: &quot;value2&quot;</endTag>
+<startTag>    },</endTag>
 <startTag>    {</endTag>
-<startTag>    &quot;otrkey&quot;: &quot;30_jahre_feste&quot;</endTag>
-<startTag>    &quot;key2&quot;: &quot;value2&quot;</endTag>
-  },
+<startTag>      &quot;otrkey&quot;: &quot;30_jahre_feste&quot;,</endTag>
+<startTag>      &quot;key2&quot;: &quot;value2&quot;</endTag>
+<startTag>    },</endTag>
 <startTag>    {</endTag>
-<startTag>    &quot;otrkey&quot;: &quot;40_jahre_feste&quot;</endTag>
-<startTag>    &quot;key2&quot;: &quot;value2&quot;</endTag>
-    }
-  ]
-}
-<wrapEnd>
+<startTag>      &quot;otrkey&quot;: &quot;40_jahre_feste&quot;,</endTag>
+<startTag>      &quot;key2&quot;: &quot;value2&quot;</endTag>
+<startTag>    }</endTag>
+<startTag>  ]</endTag>
+<startTag>}</endTag><wrapEnd>
   """
   usedErrors: []
 
@@ -472,15 +465,14 @@ b.bodyOkWithNestedStringsInArrays =
       "length":0
     },"validator":"JsonExample"}
   expectedOutput: """
-  <wrapStart>{
-  <startTag>&quot;login&quot;: &quot;true&quot;</endTag>
-  <startTag>&quot;results&quot;: [</endTag>
-  <startTag>  &quot;BooBoo&quot;</endTag>,
-  <startTag>  &quot;MrauMrau&quot;</endTag>,
-  <startTag>  &quot;BauBau&quot;</endTag>
-    ]
-  }
-  <wrapEnd>
+  <wrapStart><startTag>{</endTag>
+  <startTag>  &quot;login&quot;: &quot;true&quot;,</endTag>
+  <startTag>  &quot;results&quot;: [</endTag>
+  <startTag>    &quot;BooBoo&quot;,</endTag>
+  <startTag>    &quot;MrauMrau&quot;,</endTag>
+  <startTag>    &quot;BauBau&quot;</endTag>
+  <startTag>  ]</endTag>
+  <startTag>}</endTag><wrapEnd>
   """
   usedErrors: []
 
@@ -507,27 +499,26 @@ b.bodyOkWithNestedArraysInArrays =
       "length":0
     },"validator":"JsonExample"}
   expectedOutput: """
-<wrapStart>{
-<startTag>&quot;login&quot;: &quot;true&quot;</endTag>
-<startTag>&quot;results&quot;: [</endTag>
+<wrapStart><startTag>{</endTag>
+<startTag>  &quot;login&quot;: &quot;true&quot;,</endTag>
+<startTag>  &quot;results&quot;: [</endTag>
 <startTag>    [</endTag>
-<startTag>    1</endTag>,
-<startTag>    2</endTag>,
-<startTag>    3</endTag>
-  ],
+<startTag>      1,</endTag>
+<startTag>      2,</endTag>
+<startTag>      3</endTag>
+<startTag>    ],</endTag>
 <startTag>    [</endTag>
-<startTag>    1</endTag>,
-<startTag>    2</endTag>,
-<startTag>    3</endTag>
-  ],
+<startTag>      1,</endTag>
+<startTag>      2,</endTag>
+<startTag>      3</endTag>
+<startTag>    ],</endTag>
 <startTag>    [</endTag>
-<startTag>    1</endTag>,
-<startTag>    2</endTag>,
-<startTag>    3</endTag>
-    ]
-  ]
-}
-<wrapEnd>
+<startTag>      1,</endTag>
+<startTag>      2,</endTag>
+<startTag>      3</endTag>
+<startTag>    ]</endTag>
+<startTag>  ]</endTag>
+<startTag>}</endTag><wrapEnd>
   """
   usedErrors: []
 

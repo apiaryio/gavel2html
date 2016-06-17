@@ -4,7 +4,7 @@
   "description": "Convert output from Gavel to HTML",
   "main": "lib/index.js",
   "scripts": {
-    "test": "scripts/test",
+    "test": "scripts/test && scripts/mochify",
     "prepublish": "scripts/prepublish"
   },
   "repository": {
@@ -30,7 +30,8 @@
   "devDependencies": {
     "chai": "^1.10.0",
     "coffee-script": "^1.8.0",
-    "mocha": "^2.0.1"
+    "mocha": "^2.0.1",
+    "mochify": "^2.18.0"
   },
   "dependencies": {
     "clone": "^0.2.0",

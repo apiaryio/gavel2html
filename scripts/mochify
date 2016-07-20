@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # Test browserified bundle
 
 rm -rf mochify
@@ -18,8 +17,3 @@ STATUS=$?
 cd ..
 rm -rf mochify
 exit $STATUS
-
-
-
-
-

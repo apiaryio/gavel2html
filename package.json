@@ -4,8 +4,11 @@
   "description": "Convert output from Gavel to HTML",
   "main": "lib/index.js",
   "scripts": {
-    "test": "./scripts/test && ./scripts/mochify",
-    "prepublish": "./scripts/build"
+    "build": "coffee -b -c -o lib/ src/",
+    "test": "npm run test:server && npm run test:browser",
+    "test:server": "mocha ./test/**/*.coffee",
+    "test:browser": "mochify ./test/**/*.coffee --transform=coffeeify --extension=.coffee",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -14,6 +17,7 @@
   "devDependencies": {
     "chai": "^1.10.0",
     "coffee-script": "^1.8.0",
+    "coffeeify": "^2.0.1",
     "cz-conventional-changelog": "^1.1.6",
     "mocha": "^2.0.1",
     "mochify": "^2.18.0"

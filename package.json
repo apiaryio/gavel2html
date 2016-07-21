@@ -4,12 +4,30 @@
   "description": "Convert output from Gavel to HTML",
   "main": "lib/index.js",
   "scripts": {
-    "test": "scripts/test",
-    "prepublish": "scripts/prepublish"
+    "build": "coffee -b -c -o lib/ src/",
+    "test": "npm run test:server && npm run test:browser",
+    "test:server": "mocha ./test/**/*.coffee",
+    "test:browser": "mochify ./test/**/*.coffee --transform=coffeeify --extension=.coffee",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/apiaryio/gavel2html.git"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "coffee-script": "^1.8.0",
+    "coffeeify": "^2.0.1",
+    "cz-conventional-changelog": "^1.1.6",
+    "mocha": "^2.0.1",
+    "mochify": "^2.18.0"
+  },
+  "dependencies": {
+    "clone": "^0.2.0",
+    "googlediff": "^0.1.0",
+    "is-type": "~0.0.1",
+    "json-pointer": "^0.2.2",
+    "traverse": "^0.6.6"
   },
   "keywords": [
     "gavel",
@@ -21,22 +39,11 @@
     "testing",
     "diff"
   ],
-  "author": "Peter Grilli <tully@apiary.io>",
+  "author": "Apiary Czech Republic, s.r.o. <support@apiary.io>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/apiaryio/gavel2html/issues"
-  },
-  "homepage": "https://github.com/apiaryio/gavel2html",
-  "devDependencies": {
-    "chai": "^1.10.0",
-    "coffee-script": "^1.8.0",
-    "mocha": "^2.0.1"
-  },
-  "dependencies": {
-    "clone": "^0.2.0",
-    "googlediff": "^0.1.0",
-    "is-type": "~0.0.1",
-    "json-pointer": "^0.2.2",
-    "traverse": "^0.6.6"
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

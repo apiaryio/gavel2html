@@ -7,8 +7,8 @@
     "build": "coffee -b -c -o lib/ src/",
     "lint": "coffeelint src",
     "test": "npm run test:server && npm run test:browser",
-    "test:server": "mocha 'test/**/*.coffee'",
-    "test:browser": "mochify 'test/**/*.coffee' --transform=coffeeify --extension=.coffee",
+    "test:server": "mocha \"test/**/*.coffee\"",
+    "test:browser": "mochify \"test/**/*.coffee\" --transform=coffeeify --extension=.coffee",
     "prepublish": "npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },

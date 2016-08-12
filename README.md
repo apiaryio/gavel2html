@@ -65,5 +65,7 @@ console.log(html);
 - `commentEndTag` (string)
 - `identString` (string) - String to use for one level of indentation.
 
+> **Note:** The gavel2html library is underdocumented. Please see [#7](https://github.com/apiaryio/gavel2html/issues/7) for details.
+
 
 [Gavel.js]: https://github.com/apiaryio/gavel.js

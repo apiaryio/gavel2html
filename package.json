@@ -4,7 +4,9 @@
   "description": "Render Gavel.js output to HTML diff",
   "main": "lib/index.js",
   "scripts": {
-    "build": "coffee -b -c -o lib/ src/",
+    "build": "npm run build:coffee-script && npm run build:html-sanitizer",
+    "build:coffee-script": "coffee -b -c -o lib/ src/",
+    "build:html-sanitizer": "node -e \"var fs = require('fs'); fs.createReadStream('src/html-sanitizer.js').pipe(fs.createWriteStream('lib/html-sanitizer.js'));\"",
     "lint": "coffeelint src",
     "test": "npm run test:server && npm run test:browser",
     "test:server": "mocha \"test/**/*.coffee\"",

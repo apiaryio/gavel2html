@@ -1,5 +1,5 @@
 binaryDetect = require './binary-detect'
-sanitizer = require './html-sanitizer.js'
+sanitizer = require './html-sanitizer'
 traverse = require 'traverse'
 jsonPointer = require 'json-pointer'
 

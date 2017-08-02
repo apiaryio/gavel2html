@@ -1,7 +1,7 @@
 {assert}      = require 'chai'
 
 Gavel2Html    = require '../../src/index'
-fixtures      = require '../fixtures/gavel2html-legacy'
+fixtures      = require '../fixtures/pointers'
 
 outputOptions = fixtures.gavel2htmlOutputOptions
 
@@ -10,7 +10,7 @@ runTest = (test, outputOptions) ->
     gavel2html = undefined
     output = undefined
     before (done) ->
-      test.usePointers = false
+      test.usePointers = true
       gavel2html = new Gavel2Html test
       output = gavel2html.getHtml outputOptions
       done()
@@ -21,7 +21,7 @@ runTest = (test, outputOptions) ->
     it 'used errors should be as expected', ->
       assert.deepEqual gavel2html.usedErrors, test.usedErrors
 
-describe 'Gavel2Html Tests with legacy JSON property array notation', ->
+describe 'Gavel2Html Tests with JSON pointer notation', ->
   describe 'headers tests', ->
     outputOptions.comments = false
     for name, test of fixtures.testsHeaders
@@ -34,4 +34,5 @@ describe 'Gavel2Html Tests with legacy JSON property array notation', ->
     for name, test of fixtures.testsBody
       do (test) ->
         runTest test, outputOptions
+
 

@@ -1,8 +1,8 @@
 {assert} = require 'chai'
 
 JsonResultConverter = require '../../src/json-result-converter'
-arrayFixtures = require '../fixtures/gavel2html-legacy'
-pointerFixtures = require '../fixtures/gavel2html-pointers'
+arrayFixtures = require '../fixtures/legacy'
+pointerFixtures = require '../fixtures/pointers'
 
 describe 'JsonResultConverter', () ->
 

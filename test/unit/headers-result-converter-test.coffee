@@ -2,8 +2,8 @@
 clone    = require 'clone'
 
 HeadersResultConverter = require '../../src/headers-result-converter'
-arrayFixtures = require '../fixtures/gavel2html-legacy'
-pointerFixtures = require '../fixtures/gavel2html-pointers'
+arrayFixtures = require '../fixtures/legacy'
+pointerFixtures = require '../fixtures/pointers'
 
 describe 'HeadersResultConverter', () ->
   describe 'regression test for migration from amandaResults to JSON pointer based results in headers on case mismatch problem', () ->

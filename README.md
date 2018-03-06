@@ -1,5 +1,7 @@
 # gavel2html
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/apiaryio/gavel2html.svg)](https://greenkeeper.io/)
+
 [![npm version](https://badge.fury.io/js/gavel2html.svg)](https://badge.fury.io/js/gavel2html)
 [![Build Status](https://travis-ci.org/apiaryio/gavel2html.svg?branch=master)](https://travis-ci.org/apiaryio/gavel2html)
 [![Build status](https://ci.appveyor.com/api/projects/status/1rj4gt5g5prjp5ah/branch/master?svg=true)](https://ci.appveyor.com/project/Apiary/gavel2html/branch/master)

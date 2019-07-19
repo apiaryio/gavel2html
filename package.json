@@ -4,29 +4,35 @@
   "description": "Convert output from Gavel to HTML",
   "main": "lib/index.js",
   "scripts": {
-    "test": "scripts/test",
-    "prepublish": "scripts/prepublish"
+    "build": "npm run build:coffee-script && npm run build:html-sanitizer",
+    "build:coffee-script": "coffee -b -c -o lib/ src/",
+    "build:html-sanitizer": "node -e \"var fs = require('fs'); fs.createReadStream('src/html-sanitizer.js').pipe(fs.createWriteStream('lib/html-sanitizer.js'));\"",
+    "lint": "coffeelint src",
+    "test": "npm run test:server && npm run test:browser",
+    "test:server": "mocha \"test/**/*.coffee\"",
+    "test:browser": "mochify \"test/**/*.coffee\" --transform=coffeeify --extension=.coffee",
+    "prepublish": "npm run build",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
+  "homepage": "https://github.com/apiaryio/gavel2html",
   "repository": {
     "type": "git",
     "url": "https://github.com/apiaryio/gavel2html.git"
   },
-  "keywords": [
-    "gavel",
-    "html",
-    "http",
-    "test",
-    "validate",
-    "validation",
-    "testing",
-    "diff"
-  ],
-  "author": "Peter Grilli <tully@apiary.io>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/apiaryio/gavel2html/issues"
   },
-  "homepage": "https://github.com/apiaryio/gavel2html",
+  "keywords": [
+    "html",
+    "http",
+    "validation",
+    "diff",
+    "request",
+    "response",
+    "gavel"
+  ],
+  "author": "Apiary Czech Republic, s.r.o. <support@apiary.io>",
+  "license": "MIT",
   "devDependencies": {
     "chai": "^1.10.0",
     "coffee-script": "^1.9.1",

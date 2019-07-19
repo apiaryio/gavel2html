@@ -1,15 +1,16 @@
-language: node_js
+sudo: false
+language: "node_js"
 node_js:
-  - 0.8
-  - 0.10
+  - "4"
+  - "6"
+env:
+  global:
+    # GH_TOKEN and NPM_TOKEN encrypted by 'travis encrypt' utility
+    - secure: "Q13UhxEZZvYtrUztXKqjL7ii62bYJfFn5Zd3/MRoGgPtWokQ9fH65fcNNbj9+q5qqsk4zIlFzXriaZLFI1cCD3CRreYIckEDqvqFs5vvaZBzEo8W7PLKpSbpw7MRCSO2mmW/g7c+4oNiDn1oaCuGV6xCX6gGXUrUKRHOKzmlnaA="
+cache:
+  directories:
+    - "node_modules"
 before_install:
-  - npm install -g npm@~1.4.6
-notifications:
-  email:
-    recipients:
-      - adam@apiary.io
-      - tully@apiary.io
-    on_success: change
-    on_failure: always
-  hipchat:
-    - secure: "pKDBboEmYne/Hs9qUSCQCgWZ9insdvgvB0DyMYYpO8RHgNOAhpcY1Kz/wTmFtm1k2HjGNGx1OVgVhOYXwIiJQZbmiUT4gVDEUtmpSgiW3/uQATgaPFUAsaIFqemTPgI6Q8RfsJZQk1kRMioZhk0ldQY5A+AUIKYKg1BFiOsrO1s="
+  - "npm -g install npm@latest"
+after_success:
+  - "npm run semantic-release || true"

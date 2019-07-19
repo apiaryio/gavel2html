@@ -24,7 +24,23 @@ class Converter
   constructor: ({@dataReal, @dataExpected, @gavelResult, @usePointers}) ->
     @usedErrors   = []
 
-  getHtml: ({@wrapWith, @startTag, @missingStartTag, @addedStartTag, @changedStartTag, @endTag, @comments, @commentStartTag, @commentEndTag, @identString}) ->
+  getHtml: (options = {}) ->
+    {
+      @wrapWith
+      @startTag
+      @jsonKeyStartTag
+      @jsonKeyEndTag
+      @missingStartTag
+      @addedStartTag
+      @changedStartTag
+      @endTag
+      @comments
+      @commentStartTag
+      @commentEndTag
+      @identString
+    } = options
+
+    @outputs = [@missingStartTag, @startTag, @addedStartTag, @changedStartTag]
 
     html = @getHtmlPrivate()
 
@@ -37,8 +53,22 @@ class Converter
   getHtmlPrivate: ->
     throw new Error 'getHtmlPrivate: not implemented. Must be implemented in subclass'
 
+
+  formatFragmentParts: ({message, status}) ->
+    status ?= 0
+    out = [
+      "#{@outputs[1 * (status or 0) + 1] or ''}"
+      [@endTag]
+    ]
+
+    if @comments and message
+      out[1].push "#{@commentStartTag}#{message}#{@commentEndTag}"
+
+    return out
+
+
   #@private
-  formatFragment: ({fragment, message, status}) ->
+  formatFragment: ({fragment, message, status, omitSanitize}) ->
     output = ''
 
     switch status
@@ -51,7 +81,11 @@ class Converter
       when 2
         output += @changedStartTag
 
-    output +=  @sanitize fragment
+    if omitSanitize
+      output += fragment
+    else
+      output += @sanitize fragment
+
     output += @endTag
 
     if @comments and message

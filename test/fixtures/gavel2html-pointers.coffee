@@ -78,7 +78,7 @@ h.headersRealFailValueCase =
     ],
     "validator": "HeadersJsonExample"
   }
-  expectedOutput: "<wrapStart><changedStartTag>testHeader1: tEstHeader1Val</endTag> <commentStartTag>Value of the ‘testheader1’ must be 'testHeader1Val'.</commentEndTag><changedStartTag>testHeader2: testHEader2Val</endTag> <commentStartTag>Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><changedStartTag>testHeader1: tEstHeader1Val</endTag><changedStartTag>testHeader2: testHEader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealFailMiss =
@@ -101,7 +101,7 @@ h.headersRealFailMiss =
     ],
     "validator": "HeadersJsonExample"
   }
-  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><missingStartTag>testHeader2: testHeader2Val</endTag> <commentStartTag>The ‘testheader2’ property is required. | Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><missingStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealFailChanged =
@@ -120,7 +120,7 @@ h.headersRealFailChanged =
     ],
     "validator": "HeadersJsonExample"
   }
-  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><changedStartTag>testHeader2: testHEader2ValChanged</endTag> <commentStartTag>Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><changedStartTag>testHeader2: testHEader2ValChanged</endTag><wrapEnd>"
 
   usedErrors: []
 
@@ -144,7 +144,7 @@ h.headersRealFailEmpty =
     ],
     "validator": "HeadersJsonExample"
   }
-  expectedOutput: "<wrapStart><missingStartTag>testHeader2: testHeader2Val</endTag> <commentStartTag>The ‘testheader2’ property is required. | Value of the ‘testheader2’ must be 'testHeader2Val'.</commentEndTag><wrapEnd>"
+  expectedOutput: "<wrapStart><missingStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealOKNoEmpty =
@@ -158,6 +158,36 @@ h.headersRealOKNoEmpty =
     "validator": "HeadersJsonExample"
   }
   expectedOutput: '<wrapStart><addedStartTag>testHeader1: testHeader1Val</endTag><addedStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>'
+  usedErrors: []
+
+headersWrapHeaderKeys =
+  testHeader1: '<b>testHeader1Val</b>'
+  testHeader2: '<i>testHeader2Val</i>'
+
+h.headersWrapKeys =
+  outputOptions:
+    wrapWith: '<wrapStart>##data<wrapEnd>'
+    startTag: '<startTag>'
+    endTag: '</endTag>'
+    jsonKeyStartTag: '<keyStart>'
+    jsonKeyEndTag: '</keyEnd>'
+    missingStartTag: '<missingStartTag>'
+    addedStartTag: "<addedStartTag>"
+    changedStartTag: '<changedStartTag>'
+    comments: false
+
+  testDesc: 'when expected headers are non empty and real data are the same in real headers and I want to wrap header keys'
+  dataReal: headersWrapHeaderKeys
+  dataExpected: headersWrapHeaderKeys
+  gavelResult: {
+    "results": []
+    'validator': 'HeadersJsonExample'
+  }
+  expectedOutput: """
+  <wrapStart>\
+  <startTag><keyStart>testHeader1</keyEnd>: &lt;b&gt;testHeader1Val&lt;/b&gt;</endTag>\
+  <startTag><keyStart>testHeader2</keyEnd>: &lt;i&gt;testHeader2Val&lt;/i&gt;</endTag>\
+  <wrapEnd>"""
   usedErrors: []
 
 
@@ -233,11 +263,10 @@ b.bodyTypeFailPrimitiveVsObjRoot =
     "validator": "JsonSchema"
   }
   expectedOutput: '''
-         <wrapStart>{
-         <addedStartTag>&quot;key&quot;: &quot;val&quot;</endTag>
-         }
-         <wrapEnd>
-  '''
+         <wrapStart><startTag>{</endTag>
+         <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
+         <startTag>}</endTag><wrapEnd>
+         '''
   usedErrors: []
 
 
@@ -285,12 +314,11 @@ b.bodyTypeFailObjVsArrayRoot =
     "validator": "JsonSchema"
   }
   expectedOutput: '''
-                  <wrapStart>[
-                  <addedStartTag>1</endTag>,
-                  <addedStartTag>2</endTag>,
-                  <addedStartTag>3</endTag>
-                  ]
-                  <wrapEnd>
+                  <wrapStart><startTag>[</endTag>
+                  <addedStartTag>  1,</endTag>
+                  <addedStartTag>  2,</endTag>
+                  <addedStartTag>  3</endTag>
+                  <startTag>]</endTag><wrapEnd>
                   '''
   usedErrors: []
 
@@ -314,12 +342,11 @@ b.bodyTypeFailObjVsArrayRootNoSchema =
     "validator": "JsonExample"
   }
   expectedOutput: '''
-                  <wrapStart>[
-                  <addedStartTag>1</endTag>,
-                  <addedStartTag>2</endTag>,
-                  <addedStartTag>3</endTag>
-                  ]
-                  <wrapEnd>
+                  <wrapStart><startTag>[</endTag>
+                  <addedStartTag>  1,</endTag>
+                  <addedStartTag>  2,</endTag>
+                  <addedStartTag>  3</endTag>
+                  <startTag>]</endTag><wrapEnd>
                   '''
   usedErrors: []
 
@@ -343,10 +370,9 @@ b.bodyTypeFailArrayVsObjRoot =
     "validator": "JsonSchema"
   }
   expectedOutput: '''
-                  <wrapStart>{
-                  <addedStartTag>&quot;key&quot;: &quot;val&quot;</endTag>
-                  }
-                  <wrapEnd>
+                  <wrapStart><startTag>{</endTag>
+                  <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
+                  <startTag>}</endTag><wrapEnd>
                   '''
   usedErrors: []
 
@@ -380,10 +406,9 @@ bodyTypeFailArrayVsObjRootNoSchema =
     "validator": "JsonExample"
   }
   expectedOutput: '''
-                  <wrapStart>{
-                  <addedStartTag>&quot;key&quot;: &quot;val&quot;</endTag>
-                  }
-                  <wrapEnd>
+                  <wrapStart><startTag>{</endTag>
+                  <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
+                  <startTag>}</endTag><wrapEnd>
                   '''
   usedErrors: []
 
@@ -480,36 +505,35 @@ b.bodyComplex =
     "validator": "JsonExample"
   }
   expectedOutput: '''
-                  <wrapStart>{
-                  <startTag>&quot;simpleKeyValueOK&quot;: &quot;simpleKeyValueOK&quot;</endTag>
-                  <startTag>&quot;simpleKeyValueNumberOK&quot;: 1</endTag>
-                  <startTag>&quot;keyWithObjectValueOK&quot;: {</endTag>
-                  <startTag>  &quot;keyWithObjectValueOKnestedKey&quot;: &quot;keyWithObjectValueOKnestedKey&quot;</endTag>
-                  <startTag>  &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
-                    }
-                  <startTag>&quot;keyWithObjectValueFail&quot;: {</endTag>
-                  <startTag>  &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
-                    }
-                  <changedStartTag>&quot;keyWithObjectValueWrongTypeFail&quot;: [</endTag> <commentStartTag>The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).</commentEndTag>
-                  <addedStartTag>  1</endTag>,
-                  <addedStartTag>  2</endTag>,
-                  <addedStartTag>  3</endTag>
-                    ],
-                  <startTag>&quot;keyWithArrayValueOK&quot;: [</endTag>
-                  <startTag>  1</endTag>,
-                  <startTag>  2</endTag>,
-                  <startTag>  3</endTag>
-                    ],
-                  <startTag>&quot;keyWithArrayValueOK2&quot;: [</endTag>
-                  <startTag>  4</endTag>,
-                  <startTag>  5</endTag>,
-                  <startTag>  6</endTag>
-                    ],
-                  <changedStartTag>&quot;keyWithArrayValueTypeFail&quot;: {</endTag> <commentStartTag>The keyWithArrayValueTypeFail property must be an array (current value is {"key":"val"}).</commentEndTag>
-                  <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
-                    }
-                  }
-                  <wrapEnd>
+                  <wrapStart><startTag>{</endTag>
+                  <startTag>  &quot;simpleKeyValueOK&quot;: &quot;simpleKeyValueOK&quot;,</endTag>
+                  <startTag>  &quot;simpleKeyValueNumberOK&quot;: 1,</endTag>
+                  <startTag>  &quot;keyWithObjectValueOK&quot;: {</endTag>
+                  <startTag>    &quot;keyWithObjectValueOKnestedKey&quot;: &quot;keyWithObjectValueOKnestedKey&quot;,</endTag>
+                  <startTag>    &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
+                  <startTag>  },</endTag>
+                  <startTag>  &quot;keyWithObjectValueFail&quot;: {</endTag>
+                  <startTag>    &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
+                  <startTag>  },</endTag>
+                  <changedStartTag>  &quot;keyWithObjectValueWrongTypeFail&quot;: [</endTag> <commentStartTag>The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).</commentEndTag>
+                  <addedStartTag>    1,</endTag>
+                  <addedStartTag>    2,</endTag>
+                  <addedStartTag>    3</endTag>
+                  <startTag>  ],</endTag>
+                  <startTag>  &quot;keyWithArrayValueOK&quot;: [</endTag>
+                  <startTag>    1,</endTag>
+                  <startTag>    2,</endTag>
+                  <startTag>    3</endTag>
+                  <startTag>  ],</endTag>
+                  <startTag>  &quot;keyWithArrayValueOK2&quot;: [</endTag>
+                  <startTag>    4,</endTag>
+                  <startTag>    5,</endTag>
+                  <startTag>    6</endTag>
+                  <startTag>  ],</endTag>
+                  <changedStartTag>  &quot;keyWithArrayValueTypeFail&quot;: {</endTag> <commentStartTag>The keyWithArrayValueTypeFail property must be an array (current value is {"key":"val"}).</commentEndTag>
+                  <addedStartTag>    &quot;key&quot;: &quot;val&quot;</endTag>
+                  <startTag>  }</endTag>
+                  <startTag>}</endTag><wrapEnd>
                   '''
   usedErrors: [
     "/keyWithObjectValueWrongTypeFail",
@@ -575,36 +599,35 @@ b.bodyComplexWithNonPointerError =
     "validator": "JsonExample"
   }
   expectedOutput: '''
-                  <wrapStart>{
-                  <startTag>&quot;simpleKeyValueOK&quot;: &quot;simpleKeyValueOK&quot;</endTag>
-                  <startTag>&quot;simpleKeyValueNumberOK&quot;: 1</endTag>
-                  <startTag>&quot;keyWithObjectValueOK&quot;: {</endTag>
-                  <startTag>  &quot;keyWithObjectValueOKnestedKey&quot;: &quot;keyWithObjectValueOKnestedKey&quot;</endTag>
-                  <startTag>  &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
-                    }
-                  <startTag>&quot;keyWithObjectValueFail&quot;: {</endTag>
-                  <startTag>  &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
-                    }
-                  <changedStartTag>&quot;keyWithObjectValueWrongTypeFail&quot;: [</endTag> <commentStartTag>The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).</commentEndTag>
-                  <addedStartTag>  1</endTag>,
-                  <addedStartTag>  2</endTag>,
-                  <addedStartTag>  3</endTag>
-                    ],
-                  <startTag>&quot;keyWithArrayValueOK&quot;: [</endTag>
-                  <startTag>  1</endTag>,
-                  <startTag>  2</endTag>,
-                  <startTag>  3</endTag>
-                    ],
-                  <startTag>&quot;keyWithArrayValueOK2&quot;: [</endTag>
-                  <startTag>  4</endTag>,
-                  <startTag>  5</endTag>,
-                  <startTag>  6</endTag>
-                    ],
-                  <changedStartTag>&quot;keyWithArrayValueTypeFail&quot;: {</endTag> <commentStartTag>The keyWithArrayValueTypeFail property must be an array (current value is {"key":"val"}).</commentEndTag>
-                  <addedStartTag>  &quot;key&quot;: &quot;val&quot;</endTag>
-                    }
-                  }
-                  <wrapEnd>
+                  <wrapStart><startTag>{</endTag>
+                  <startTag>  &quot;simpleKeyValueOK&quot;: &quot;simpleKeyValueOK&quot;,</endTag>
+                  <startTag>  &quot;simpleKeyValueNumberOK&quot;: 1,</endTag>
+                  <startTag>  &quot;keyWithObjectValueOK&quot;: {</endTag>
+                  <startTag>    &quot;keyWithObjectValueOKnestedKey&quot;: &quot;keyWithObjectValueOKnestedKey&quot;,</endTag>
+                  <startTag>    &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
+                  <startTag>  },</endTag>
+                  <startTag>  &quot;keyWithObjectValueFail&quot;: {</endTag>
+                  <startTag>    &quot;keyWithObjectValueOKnestedKey2&quot;: &quot;keyWithObjectValueOKnestedKey2&quot;</endTag>
+                  <startTag>  },</endTag>
+                  <changedStartTag>  &quot;keyWithObjectValueWrongTypeFail&quot;: [</endTag> <commentStartTag>The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).</commentEndTag>
+                  <addedStartTag>    1,</endTag>
+                  <addedStartTag>    2,</endTag>
+                  <addedStartTag>    3</endTag>
+                  <startTag>  ],</endTag>
+                  <startTag>  &quot;keyWithArrayValueOK&quot;: [</endTag>
+                  <startTag>    1,</endTag>
+                  <startTag>    2,</endTag>
+                  <startTag>    3</endTag>
+                  <startTag>  ],</endTag>
+                  <startTag>  &quot;keyWithArrayValueOK2&quot;: [</endTag>
+                  <startTag>    4,</endTag>
+                  <startTag>    5,</endTag>
+                  <startTag>    6</endTag>
+                  <startTag>  ],</endTag>
+                  <changedStartTag>  &quot;keyWithArrayValueTypeFail&quot;: {</endTag> <commentStartTag>The keyWithArrayValueTypeFail property must be an array (current value is {"key":"val"}).</commentEndTag>
+                  <addedStartTag>    &quot;key&quot;: &quot;val&quot;</endTag>
+                  <startTag>  }</endTag>
+                  <startTag>}</endTag><wrapEnd>
                   '''
   usedErrors: [
     "/keyWithObjectValueWrongTypeFail",
@@ -635,24 +658,23 @@ b.bodyOkWithNestedObjectsInArrays =
     "validator": "JsonExample"
   }
   expectedOutput: """
-<wrapStart>{
-<startTag>&quot;login&quot;: &quot;true&quot;</endTag>
-<startTag>&quot;results&quot;: [</endTag>
+<wrapStart><startTag>{</endTag>
+<startTag>  &quot;login&quot;: &quot;true&quot;,</endTag>
+<startTag>  &quot;results&quot;: [</endTag>
 <startTag>    {</endTag>
-<startTag>    &quot;otrkey&quot;: &quot;20_jahre_feste&quot;</endTag>
-<startTag>    &quot;key2&quot;: &quot;value2&quot;</endTag>
-  },
+<startTag>      &quot;otrkey&quot;: &quot;20_jahre_feste&quot;,</endTag>
+<startTag>      &quot;key2&quot;: &quot;value2&quot;</endTag>
+<startTag>    },</endTag>
 <startTag>    {</endTag>
-<startTag>    &quot;otrkey&quot;: &quot;30_jahre_feste&quot;</endTag>
-<startTag>    &quot;key2&quot;: &quot;value2&quot;</endTag>
-  },
+<startTag>      &quot;otrkey&quot;: &quot;30_jahre_feste&quot;,</endTag>
+<startTag>      &quot;key2&quot;: &quot;value2&quot;</endTag>
+<startTag>    },</endTag>
 <startTag>    {</endTag>
-<startTag>    &quot;otrkey&quot;: &quot;40_jahre_feste&quot;</endTag>
-<startTag>    &quot;key2&quot;: &quot;value2&quot;</endTag>
-    }
-  ]
-}
-<wrapEnd>
+<startTag>      &quot;otrkey&quot;: &quot;40_jahre_feste&quot;,</endTag>
+<startTag>      &quot;key2&quot;: &quot;value2&quot;</endTag>
+<startTag>    }</endTag>
+<startTag>  ]</endTag>
+<startTag>}</endTag><wrapEnd>
   """
   usedErrors: []
 
@@ -679,15 +701,14 @@ b.bodyOkWithNestedStringsInArrays =
     "validator": "JsonExample"
   }
   expectedOutput: """
-  <wrapStart>{
-  <startTag>&quot;login&quot;: &quot;true&quot;</endTag>
-  <startTag>&quot;results&quot;: [</endTag>
-  <startTag>  &quot;BooBoo&quot;</endTag>,
-  <startTag>  &quot;MrauMrau&quot;</endTag>,
-  <startTag>  &quot;BauBau&quot;</endTag>
-    ]
-  }
-  <wrapEnd>
+  <wrapStart><startTag>{</endTag>
+  <startTag>  &quot;login&quot;: &quot;true&quot;,</endTag>
+  <startTag>  &quot;results&quot;: [</endTag>
+  <startTag>    &quot;BooBoo&quot;,</endTag>
+  <startTag>    &quot;MrauMrau&quot;,</endTag>
+  <startTag>    &quot;BauBau&quot;</endTag>
+  <startTag>  ]</endTag>
+  <startTag>}</endTag><wrapEnd>
   """
   usedErrors: []
 
@@ -714,29 +735,77 @@ b.bodyOkWithNestedArraysInArrays =
     "validator": "JsonExample"
   }
   expectedOutput: """
-<wrapStart>{
-<startTag>&quot;login&quot;: &quot;true&quot;</endTag>
-<startTag>&quot;results&quot;: [</endTag>
+<wrapStart><startTag>{</endTag>
+<startTag>  &quot;login&quot;: &quot;true&quot;,</endTag>
+<startTag>  &quot;results&quot;: [</endTag>
 <startTag>    [</endTag>
-<startTag>    1</endTag>,
-<startTag>    2</endTag>,
-<startTag>    3</endTag>
-  ],
+<startTag>      1,</endTag>
+<startTag>      2,</endTag>
+<startTag>      3</endTag>
+<startTag>    ],</endTag>
 <startTag>    [</endTag>
-<startTag>    1</endTag>,
-<startTag>    2</endTag>,
-<startTag>    3</endTag>
-  ],
+<startTag>      1,</endTag>
+<startTag>      2,</endTag>
+<startTag>      3</endTag>
+<startTag>    ],</endTag>
 <startTag>    [</endTag>
-<startTag>    1</endTag>,
-<startTag>    2</endTag>,
-<startTag>    3</endTag>
-    ]
-  ]
-}
-<wrapEnd>
+<startTag>      1,</endTag>
+<startTag>      2,</endTag>
+<startTag>      3</endTag>
+<startTag>    ]</endTag>
+<startTag>  ]</endTag>
+<startTag>}</endTag><wrapEnd>
   """
   usedErrors: []
+
+
+
+b.bodyOkWithNestedStringsInArraysWrappedKeys =
+  testDesc: 'when expected and real body are the same and I want to wrap object keys in additional tags'
+  dataReal: JSON.stringify {
+    "login": "true"
+    "results": [
+      "BooBoo"
+      5
+      "BauBau"
+    ]
+  }
+  dataExpected: JSON.stringify {
+    "login": "true"
+    "results": [
+      "BooBoo"
+      5
+      "BauBau"
+    ]
+  }
+  gavelResult: {
+    "results": [],
+    "validator": "JsonExample"
+  }
+  expectedOutput: """
+  <wrapStart><startTag>{</endTag>
+  <startTag>  &quot;<keyStart>login</keyEnd>&quot;: &quot;true&quot;,</endTag>
+  <startTag>  &quot;<keyStart>results</keyEnd>&quot;: [</endTag>
+  <startTag>    &quot;BooBoo&quot;,</endTag>
+  <startTag>    5,</endTag>
+  <startTag>    &quot;BauBau&quot;</endTag>
+  <startTag>  ]</endTag>
+  <startTag>}</endTag><wrapEnd>
+  """
+  usedErrors: []
+  outputOptions:
+    jsonKeyStartTag: "<keyStart>"
+    jsonKeyEndTag: "</keyEnd>"
+    wrapWith: '<wrapStart>##data<wrapEnd>'
+    startTag: '<startTag>'
+    endTag: '</endTag>'
+    missingStartTag: '<missingStartTag>'
+    addedStartTag: "<addedStartTag>"
+    changedStartTag: '<changedStartTag>'
+    comments: true
+    commentStartTag: '<commentStartTag>'
+    commentEndTag: '</commentEndTag>'
+
 
 module.exports = {
   gavel2htmlOutputOptions

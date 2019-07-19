@@ -1,8 +1,7 @@
 sudo: false
 language: "node_js"
 node_js:
-  - "4"
-  - "6"
+  - "8"
 env:
   global:
     # GH_TOKEN and NPM_TOKEN encrypted by 'travis encrypt' utility
@@ -13,4 +12,4 @@ cache:
 before_install:
   - "npm -g install npm@latest"
 after_success:
-  - "npm run semantic-release || true"
+  - "npm test"

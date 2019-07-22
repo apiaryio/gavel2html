@@ -12,10 +12,11 @@ class HeadersResultConverter extends Converter
 
   #@private
   _getLines: ->
-    if @usePointers
-      lineResultGetter = @getStateAndMessageFromResults
-    else
-      lineResultGetter = @getStateAndMessageFromAmandaResult
+    lineResultGetter = @getStateAndMessageFromResults
+    
+    # if @usePointers
+    # else
+    #   lineResultGetter = @getStateAndMessageFromAmandaResult
 
     @dataReal     = @getFromString @dataReal
     @dataExpected = @getFromString @dataExpected

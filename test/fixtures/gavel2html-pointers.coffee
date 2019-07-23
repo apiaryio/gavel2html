@@ -19,12 +19,21 @@ headersExpectedEmpty = {}
 
 h.headersRealOK =
   testDesc: 'when expected headers are non empty and real data are the same in real headers'
-  dataReal:
-    testHeader1: 'testHeader1Val'
-    testHeader2: 'testHeader2Val'
-  dataExpected: headersExpected
-  gavelResult: {
-    "results": []
+  # dataReal:
+  #   testHeader1: 'testHeader1Val'
+  #   testHeader2: 'testHeader2Val'
+  # dataExpected: headersExpected
+  # fieldName: 'headers'
+  fieldResult: {
+    "kind": "json"
+    "values": {
+      "expected": headersExpected
+      "actual": {
+        testHeader1: 'testHeader1Val'
+        testHeader2: 'testHeader2Val'
+      }
+    }
+    "errors": []
   }
   expectedOutput: '<wrapStart><startTag>{&quot;testHeader1&quot;:&quot;testHeader1Val&quot;,&quot;testHeader2&quot;:&quot;testHeader2Val&quot;}</endTag><wrapEnd>'
   usedErrors: []
@@ -32,93 +41,136 @@ h.headersRealOK =
 
 h.headersRealOKMore =
   testDesc: 'when expected headers are non empty and real data extends it'
-  dataReal:
-    testHeader1: 'testHeader1Val'
-    testHeader2: 'testHeader2Val'
-    testHeader3: 'testHEader3Val'
-  dataExpected: headersExpected
-  gavelResult:{
-    "results": [],
-    "validator": "HeadersJsonExample"
+  # dataReal:
+  #   testHeader1: 'testHeader1Val'
+  #   testHeader2: 'testHeader2Val'
+  #   testHeader3: 'testHEader3Val'
+  # dataExpected: headersExpected
+  fieldName: 'headers'
+  fieldResult:{
+    "kind": "json",
+    "values": {
+      "expected": headersExpected
+      "actual": {
+        "testHeader1": 'testHeader1Val'
+        "testHeader2": 'testHeader2Val'
+        "testHeader3": 'testHEader3Val'
+      }
+    }
+    "errors": [],
   }
   expectedOutput: '<wrapStart><startTag>testHeader1: testHeader1Val</endTag><startTag>testHeader2: testHeader2Val</endTag><addedStartTag>testHeader3: testHEader3Val</endTag><wrapEnd>'
   usedErrors: []
 
 h.headersRealOKKeyCase =
   testDesc: 'when expected headers are non empty and real data are the same except cAsE of key'
-  dataReal:
-    testHEAder1: 'testHeader1Val'
-    testHeader2: 'testHeader2Val'
-  dataExpected: headersExpected
-  gavelResult: {
-    "results": [],
-    "validator": "HeadersJsonExample"
+  # dataReal:
+  #   testHEAder1: 'testHeader1Val'
+  #   testHeader2: 'testHeader2Val'
+  # dataExpected: headersExpected
+  fieldName: 'headers',
+  fieldResult: {
+    "kind": "json",
+    "values": {
+      "expected": headersExpected
+      "actual": {
+        "testHEAder1": 'testHeader1Val'
+        "testHeader2": 'testHeader2Val'
+      },
+    },
+    "errors": [],
   }
   expectedOutput: '<wrapStart><startTag>testHEAder1: testHeader1Val</endTag><startTag>testHeader2: testHeader2Val</endTag><wrapEnd>'
   usedErrors: []
 
 h.headersRealFailValueCase =
   testDesc: 'when expected headers are non empty and real data are the same except cAsE of value'
-  dataReal:
-    testHeader1: 'tEstHeader1Val'
-    testHeader2: 'testHEader2Val'
-  dataExpected: headersExpected
-  gavelResult: {
-    "results": [
+  # dataReal:
+  # dataExpected: headersExpected
+  fieldName: 'headers'
+  fieldResult: {
+    "values": {
+      "expected": headersExpected
+      "actual": {
+        "testHeader1": 'tEstHeader1Val'
+        "testHeader2": 'testHEader2Val'
+      }
+    },
+    "errors": [
       {
         "message": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
-        "severity": "error",
-        "pointer": "/testheader2"
+        "location": {
+          "pointer": "/testheader2"
+        }
       },
       {
         "message": "Value of the ‘testheader1’ must be 'testHeader1Val'.",
-        "severity": "error",
-        "pointer": "/testheader1"
+        "location": {
+          "pointer": "/testheader1"
+        }
       }
     ],
-    "validator": "HeadersJsonExample"
+    "kind": "json"
   }
   expectedOutput: "<wrapStart><changedStartTag>testHeader1: tEstHeader1Val</endTag><changedStartTag>testHeader2: testHEader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealFailMiss =
   testDesc: 'when expected headers are non empty and key missing in real data'
-  dataReal:
-    testHeader1: 'testHeader1Val'
-  dataExpected: headersExpected
-  gavelResult: {
-    "results": [
+  # dataReal:
+  #   testHeader1: 'testHeader1Val'
+  # dataExpected: headersExpected
+  fieldName: 'headers'
+  fieldResult: {
+    "values": {
+      "expected": headersExpected
+      "actual": {
+        "testHeader1": 'testHeader1Val'
+      }
+    }
+    "errors": [
       {
         "message": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
-        "severity": "error",
-        "pointer": "/testheader2"
+        "location": {
+          "pointer": "/testheader2"
+        }
       },
       {
         "message": "The ‘testheader2’ property is required.",
-        "severity": "error",
-        "pointer": "/testheader2"
+        "location": {
+          "pointer": "/testheader2"
+        }
       }
     ],
-    "validator": "HeadersJsonExample"
+    "kind": "json"
   }
   expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><missingStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealFailChanged =
   testDesc: 'when expected headers are non empty and data changed in real data'
-  dataReal:
-    testHeader1: 'testHeader1Val'
-    testHeader2: 'testHEader2ValChanged'
-  dataExpected: headersExpected
-  gavelResult: {
-    "results": [
+  # dataReal:
+  #   testHeader1: 'testHeader1Val'
+  #   testHeader2: 'testHEader2ValChanged'
+  # dataExpected: headersExpected
+  fieldName: 'headers'
+  fieldResult: {
+    "values": {
+      "expected": headersExpected
+      "actual": {
+        "testHeader1": 'testHeader1Val'
+        "testHeader2": 'testHEader2ValChanged'
+      }
+    }
+    "errors": [
       {
         "message": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
-        "severity": "error",
-        "pointer": "/testheader2"
+        "location": {
+          "pointer": "/testheader2"
+        }
       }
     ],
-    "validator": "HeadersJsonExample"
+    "kind": "json"
   }
   expectedOutput: "<wrapStart><startTag>testHeader1: testHeader1Val</endTag><changedStartTag>testHeader2: testHEader2ValChanged</endTag><wrapEnd>"
 
@@ -126,36 +178,53 @@ h.headersRealFailChanged =
 
 h.headersRealFailEmpty =
   testDesc: 'when expected headers are non empty and real data are empty'
-  dataReal: {}
-  dataExpected:
-    testHeader2: 'testHeader2Val'
-  gavelResult: {
-    "results": [
+  # dataReal: {}
+  # dataExpected:
+  #   testHeader2: 'testHeader2Val'
+  fieldName: 'headers'
+  fieldResult: {
+    "values": {
+      "expected": {
+        "testHeader2": 'testHeader2Val'
+      }
+      "actual": {}
+    },
+    "errors": [
       {
         "message": "Value of the ‘testheader2’ must be 'testHeader2Val'.",
-        "severity": "error",
-        "pointer": "/testheader2"
+        "location": {
+          "pointer": "/testheader2"
+        }
       },
       {
         "message": "The ‘testheader2’ property is required.",
-        "severity": "error",
-        "pointer": "/testheader2"
+        "location": {
+          "pointer": "/testheader2"
+        }
       }
     ],
-    "validator": "HeadersJsonExample"
+    "kind": "json"
   }
   expectedOutput: "<wrapStart><missingStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>"
   usedErrors: []
 
 h.headersRealOKNoEmpty =
   testDesc: 'when expected headers are empty and real data are not empty'
-  dataReal:
-    testHeader1: 'testHeader1Val'
-    testHeader2: 'testHeader2Val'
-  dataExpected: {}
-  gavelResult: {
-    "results": [],
-    "validator": "HeadersJsonExample"
+  # dataReal:
+  #   testHeader1: 'testHeader1Val'
+  #   testHeader2: 'testHeader2Val'
+  # dataExpected: {}
+  fieldName: 'headers'
+  fieldResult: {
+    "values": {
+      "expected": {}
+      "actual": {
+        testHeader1: 'testHeader1Val'
+        testHeader2: 'testHeader2Val'
+      }
+    },
+    "errors": [],
+    "kind": "json"
   }
   expectedOutput: '<wrapStart><addedStartTag>testHeader1: testHeader1Val</endTag><addedStartTag>testHeader2: testHeader2Val</endTag><wrapEnd>'
   usedErrors: []
@@ -177,11 +246,16 @@ h.headersWrapKeys =
     comments: false
 
   testDesc: 'when expected headers are non empty and real data are the same in real headers and I want to wrap header keys'
-  dataReal: headersWrapHeaderKeys
-  dataExpected: headersWrapHeaderKeys
-  gavelResult: {
-    "results": []
-    'validator': 'HeadersJsonExample'
+  # dataReal: headersWrapHeaderKeys
+  # dataExpected: headersWrapHeaderKeys
+  fieldName: 'headers'
+  fieldResult: {
+    "values": {
+      "expected": headersWrapHeaderKeys,
+      "actual": headersWrapHeaderKeys
+    }
+    "errors": []
+    "kind": "json"
   }
   expectedOutput: """
   <wrapStart>\
@@ -199,22 +273,28 @@ b  = {}
 
 b.bodyTypeFailFailIntVsStringRoot =
   testDesc: 'when expected body is integer and real is string'
-  dataReal: '1'
-  dataExpected: 1
+  # dataReal: '1'
+  # dataExpected: 1
   schema: {
     "type":"number",
     "$schema": "http://json-schema.org/draft-03/schema",
     "required":true
   }
-  gavelResult: {
-    "results": [
+  fieldName: "body"
+  fieldResult: {
+    "values": {
+      "expected": 1
+      "actual": '1'
+    }
+    "errors": [
       {
         "message": "The undefined property must be a number (current value is \"1\").",
-        "severity": "error",
-        "pointer": ""
+        "location": {
+          "pointer": ""
+        }
       }
     ],
-    "validator": "JsonSchema"
+    "kind": "json"
   }
   expectedOutput: '<wrapStart><changedStartTag>1</endTag> <commentStartTag>The property must be a number (current value is "1").</commentEndTag><wrapEnd>'
   usedErrors: ['']
@@ -222,22 +302,28 @@ b.bodyTypeFailFailIntVsStringRoot =
 
 b.bodyTypeFailStringVsIntRoot =
   testDesc: 'when expected body is string and real is integer'
-  dataReal: 1
-  dataExpected: "1"
+  # dataReal: 1
+  # dataExpected: "1"
   schema: {
     "type":"string",
     "$schema": "http://json-schema.org/draft-03/schema",
     "required":true
   }
-  gavelResult: {
-    "results": [
+  fieldName: "body"
+  fieldResult: {
+    "values": {
+      "expected": '1'
+      "actual": 1
+    }
+    "errors": [
       {
         "message": "The undefined property must be a string (current value is 1).",
-        "severity": "error",
-        "pointer": ""
+        "location": {
+          "pointer": ""
+        }
       }
     ],
-    "validator": "JsonSchema"
+    "kind": "json"
   }
   expectedOutput: '<wrapStart><changedStartTag>1</endTag> <commentStartTag>The property must be a string (current value is 1).</commentEndTag><wrapEnd>'
   usedErrors: ['']
@@ -245,22 +331,28 @@ b.bodyTypeFailStringVsIntRoot =
 
 b.bodyTypeFailPrimitiveVsObjRoot =
   testDesc: 'when expected body is primitive and real is object'
-  dataReal: JSON.stringify {'key': 'val'}
-  dataExpected: "1"
+  # dataReal: JSON.stringify {'key': 'val'}
+  # dataExpected: "1"
   schema: {
     "type":"string",
     "$schema": "http://json-schema.org/draft-03/schema",
     "required":true
   }
-  gavelResult: {
-    "results": [
+  fieldName: "body"
+  fieldResult: {
+    "values": {
+      "expected": "1"
+      "actual": JSON.stringify {'key': 'val'}
+    }
+    "errors": [
       {
         "message": "The undefined property must be a string (current value is {\"key\":\"val\"}).",
-        "severity": "error",
-        "pointer": ""
+        "location": {
+          "pointer": ""
+        }
       }
     ],
-    "validator": "JsonSchema"
+    "kind": "json"
   }
   expectedOutput: '''
          <wrapStart><startTag>{</endTag>
@@ -272,22 +364,28 @@ b.bodyTypeFailPrimitiveVsObjRoot =
 
 b.bodyTypeFailObjVsPrimitiveRoot =
   testDesc: 'when expected body is object and real is primitive'
-  dataReal:  "1"
-  dataExpected: JSON.stringify {"key": "val"}
+  # dataReal:  "1"
+  # dataExpected: JSON.stringify {"key": "val"}
   schema: {
     "type":"object",
     "$schema": "http://json-schema.org/draft-03/schema",
     "required":true
   }
-  gavelResult: {
-    "results": [
+  fieldName: "body"
+  fieldResult: {
+    "values": { 
+      "expected": JSON.stringify {"key": "val"}
+      "actual": "1"
+    },
+    "errors": [
       {
         "message": "The  property must be an object (current value is 1).",
-        "severity": "error",
-        "pointer": ""
+        "location": {
+          "pointer": ""
+        }
       }
     ],
-    "validator": "JsonSchema"
+    "kind": "json"
   }
   expectedOutput: '<wrapStart><changedStartTag>1</endTag> <commentStartTag>The  property must be an object (current value is 1).</commentEndTag><wrapEnd>'
   usedErrors: [""]
@@ -296,22 +394,28 @@ b.bodyTypeFailObjVsPrimitiveRoot =
 
 b.bodyTypeFailObjVsArrayRoot =
   testDesc: 'when expected body is object and real is array'
-  dataReal:  JSON.stringify [1,2,3]
-  dataExpected: JSON.stringify {"key": "val"}
+  # dataReal:  JSON.stringify [1,2,3]
+  # dataExpected: JSON.stringify {"key": "val"}
   schema: {
     "type":"object",
     "$schema": "http://json-schema.org/draft-03/schema",
     "required":true
   }
-  gavelResult: {
-    "results": [
+  fieldName: "body"
+  fieldResult: {
+    "values": {
+      "expected":  JSON.stringify {"key": "val"}
+      "actual":  JSON.stringify [1,2,3]
+    }
+    "errors": [
       {
         "message": "The  property must be an object (current value is [1,2,3]).",
-        "severity": "error",
-        "pointer": ""
+        "location": {
+          "pointer": ""
+        }
       }
     ],
-    "validator": "JsonSchema"
+    "kind": "json"
   }
   expectedOutput: '''
                   <wrapStart><startTag>[</endTag>
@@ -324,22 +428,29 @@ b.bodyTypeFailObjVsArrayRoot =
 
 b.bodyTypeFailObjVsArrayRootNoSchema =
   testDesc: 'when expected body is object and real is array  (no schema)'
-  dataReal:  JSON.stringify [1,2,3]
-  dataExpected: JSON.stringify {"key": "val"}
-  gavelResult: {
-    "results": [
+  # dataReal:  JSON.stringify [1,2,3]
+  # dataExpected: JSON.stringify {"key": "val"}
+  fieldName: "body"
+  fieldResult: {
+    "values": {
+      "expected": JSON.stringify {"key": "val"}
+      "actual": JSON.stringify [1,2,3]
+    }
+    "errors": [
       {
         "message": "The  property must be an object (current value is [1,2,3]).",
-        "severity": "error",
-        "pointer": ""
+        "location": {
+          "pointer": ""
+        }
       },
       {
         "message": "The ‘key’ property is required.",
-        "severity": "error",
-        "pointer": "/key"
+        "location": {
+          "pointer": "/key"
+        }
       }
     ],
-    "validator": "JsonExample"
+    "kind": "json"
   }
   expectedOutput: '''
                   <wrapStart><startTag>[</endTag>
@@ -352,22 +463,28 @@ b.bodyTypeFailObjVsArrayRootNoSchema =
 
 b.bodyTypeFailArrayVsObjRoot =
   testDesc: 'when expected body is array and real is object'
-  dataReal:  JSON.stringify {"key": "val"}
-  dataExpected: JSON.stringify [1,2,3]
+  # dataReal:  JSON.stringify {"key": "val"}
+  # dataExpected: JSON.stringify [1,2,3]
   schema: {
     "type":"array",
     "$schema": "http://json-schema.org/draft-03/schema",
     "required":true
   }
-  gavelResult: {
-    "results": [
+  fieldName: "body"
+  fieldResult: {
+    "values": {
+      "expected": JSON.stringify [1,2,3]
+      "actual": JSON.stringify {"key": "val"}
+    },
+    "errors": [
       {
         "message": "The  property must be an array (current value is {\"key\":\"val\"}).",
-        "severity": "error",
-        "pointer": ""
+        "location": {
+          "pointer": ""
+        }
       }
     ],
-    "validator": "JsonSchema"
+    "kind": "json"
   }
   expectedOutput: '''
                   <wrapStart><startTag>{</endTag>
@@ -378,32 +495,41 @@ b.bodyTypeFailArrayVsObjRoot =
 
 bodyTypeFailArrayVsObjRootNoSchema =
   testDesc: 'when expected body is array and real is object (no schema)'
-  dataReal:  JSON.stringify {"key": "val"}
-  dataExpected: JSON.stringify [1,2,3]
-  gavelResult: {
-    "results": [
+  # dataReal:  JSON.stringify {"key": "val"}
+  # dataExpected: JSON.stringify [1,2,3]
+  fieldName: "body"
+  fieldResult: {
+    "values": {
+      "expected": JSON.stringify [1,2,3]
+      "actual": JSON.stringify {"key": "val"}
+    }
+    "errors": [
       {
         "message": "The  property must be an array (current value is {\"key\":\"val\"}).",
-        "severity": "error",
-        "pointer": ""
+        "location": {
+          "pointer": ""
+        }
       },
       {
         "message": "The ‘0’ property is required.",
-        "severity": "error",
-        "pointer": "/0"
+        "location": {
+          "pointer": "/0"
+        }
       },
       {
         "message": "The ‘1’ property is required.",
-        "severity": "error",
-        "pointer": "/1"
+        "location": {
+          "pointer": "/1"
+        }
       },
       {
         "message": "The ‘2’ property is required.",
-        "severity": "error",
-        "pointer": "/2"
+        "location": {
+          "pointer": "/2"
+        }
       }
     ],
-    "validator": "JsonExample"
+    "kind": "json"
   }
   expectedOutput: '''
                   <wrapStart><startTag>{</endTag>
@@ -452,57 +578,71 @@ bodyComplexReal = {
 
 b.bodyComplex =
   testDesc: 'complex body test'
-  dataReal:  JSON.stringify bodyComplexReal
-  dataExpected: JSON.stringify bodyComplexExpected
-  gavelResult:{
-    "results": [
+  # dataReal:  JSON.stringify bodyComplexReal
+  # dataExpected: JSON.stringify bodyComplexExpected
+  fieldName: "body"
+  fieldResult: {
+    "values": {
+      "expected": JSON.stringify bodyComplexExpected
+      "actual": JSON.stringify bodyComplexReal
+    }
+    "errors": [
       {
         "message": "The ‘simpleKeyValueOKmiss’ property is required.",
-        "severity": "error",
-        "pointer": "/simpleKeyValueOKmiss"
+        "location": {
+          "pointer": "/simpleKeyValueOKmiss"
+        }
       },
       {
         "message": "The ‘keyWithObjectValueFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithObjectValueFail/keyWithObjectValueOKnestedKeyMiss"
+        "location": {
+          "pointer": "/keyWithObjectValueFail/keyWithObjectValueOKnestedKeyMiss"
+        }
       },
       {
         "message": "The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).",
-        "severity": "error",
-        "pointer": "/keyWithObjectValueWrongTypeFail"
+        "location": {
+          "pointer": "/keyWithObjectValueWrongTypeFail"
+        }
       },
       {
         "message": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKeyMiss"
+        "location": {
+          "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKeyMiss"
+        }
       },
       {
         "message": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKey2’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKey2"
+        "location": {
+          "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKey2"
+        }
       },
       {
         "message": "The keyWithArrayValueTypeFail property must be an array (current value is {\"key\":\"val\"}).",
-        "severity": "error",
-        "pointer": "/keyWithArrayValueTypeFail"
+        "location": {
+          "pointer": "/keyWithArrayValueTypeFail"
+        }
       },
       {
         "message": "The ‘keyWithArrayValueTypeFail,0’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithArrayValueTypeFail/0"
+        "location": {
+          "pointer": "/keyWithArrayValueTypeFail/0"
+        }
       },
       {
         "message": "The ‘keyWithArrayValueTypeFail,1’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithArrayValueTypeFail/1"
+        "location": {
+          "pointer": "/keyWithArrayValueTypeFail/1"
+        }
       },
       {
         "message": "The ‘keyWithArrayValueTypeFail,2’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithArrayValueTypeFail/2"
+        "location": {
+          "pointer": "/keyWithArrayValueTypeFail/2"
+        }
       }
     ],
-    "validator": "JsonExample"
+    "kind": "json"
   }
   expectedOutput: '''
                   <wrapStart><startTag>{</endTag>
@@ -542,61 +682,74 @@ b.bodyComplex =
 
 b.bodyComplexWithNonPointerError =
   testDesc: 'complex body test with non pointer error in gavel results'
-  dataReal:  JSON.stringify bodyComplexReal
-  dataExpected: JSON.stringify bodyComplexExpected
-  gavelResult:{
-    "results": [
+  # dataReal:  JSON.stringify bodyComplexReal
+  # dataExpected: JSON.stringify bodyComplexExpected
+  fieldName: 'body'
+  fieldResult: {
+    "values": {
+      "expected": JSON.stringify bodyComplexExpected
+      "actual": JSON.stringify bodyComplexReal
+    },
+    "errors": [
       {
         "message": "Your mamma can't swim up the hill."
-        "severity": "error"
-      }
+      },
       {
         "message": "The ‘simpleKeyValueOKmiss’ property is required.",
-        "severity": "error",
-        "pointer": "/simpleKeyValueOKmiss"
+        "location": {
+          "pointer": "/simpleKeyValueOKmiss"
+        }
       },
       {
         "message": "The ‘keyWithObjectValueFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithObjectValueFail/keyWithObjectValueOKnestedKeyMiss"
+        "location": {
+          "pointer": "/keyWithObjectValueFail/keyWithObjectValueOKnestedKeyMiss"
+        }
       },
       {
         "message": "The keyWithObjectValueWrongTypeFail property must be an object (current value is [1,2,3]).",
-        "severity": "error",
-        "pointer": "/keyWithObjectValueWrongTypeFail"
+        "location": {
+          "pointer": "/keyWithObjectValueWrongTypeFail"
+        }
       },
       {
         "message": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKeyMiss’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKeyMiss"
+        "location": {
+          "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKeyMiss"
+        }
       },
       {
         "message": "The ‘keyWithObjectValueWrongTypeFail,keyWithObjectValueOKnestedKey2’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKey2"
+        "location": {
+          "pointer": "/keyWithObjectValueWrongTypeFail/keyWithObjectValueOKnestedKey2"
+        }
       },
       {
         "message": "The keyWithArrayValueTypeFail property must be an array (current value is {\"key\":\"val\"}).",
-        "severity": "error",
-        "pointer": "/keyWithArrayValueTypeFail"
+        "location": {
+          "pointer": "/keyWithArrayValueTypeFail"
+        }
       },
       {
         "message": "The ‘keyWithArrayValueTypeFail,0’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithArrayValueTypeFail/0"
+        "location": {
+          "pointer": "/keyWithArrayValueTypeFail/0"
+        }
       },
       {
         "message": "The ‘keyWithArrayValueTypeFail,1’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithArrayValueTypeFail/1"
+        "location": {
+          "pointer": "/keyWithArrayValueTypeFail/1"
+        }
       },
       {
         "message": "The ‘keyWithArrayValueTypeFail,2’ property is required.",
-        "severity": "error",
-        "pointer": "/keyWithArrayValueTypeFail/2"
+        "location": {
+          "pointer": "/keyWithArrayValueTypeFail/2"
+        }
       }
     ],
-    "validator": "JsonExample"
+    "kind": "json"
   }
   expectedOutput: '''
                   <wrapStart><startTag>{</endTag>
@@ -637,25 +790,44 @@ b.bodyComplexWithNonPointerError =
 
 b.bodyOkWithNestedObjectsInArrays =
   testDesc: 'when expected and real body are the same and contains array of objects'
-  dataReal: JSON.stringify {
-    "login": "true"
-    "results": [
-      {"otrkey": "20_jahre_feste", "key2": "value2"}
-      {"otrkey": "30_jahre_feste", "key2": "value2"}
-      {"otrkey": "40_jahre_feste", "key2": "value2"}
-    ]
-  }
-  dataExpected: JSON.stringify {
-    "login": "true"
-    "results": [
-      {"otrkey": "20_jahre_feste", "key2": "value2"}
-      {"otrkey": "30_jahre_feste", "key2": "value2"}
-      {"otrkey": "40_jahre_feste", "key2": "value2"}
-    ]
-  }
-  gavelResult: {
-    "results": [],
-    "validator": "JsonExample"
+  # dataReal: JSON.stringify {
+  #   "login": "true"
+  #   "results": [
+  #     {"otrkey": "20_jahre_feste", "key2": "value2"}
+  #     {"otrkey": "30_jahre_feste", "key2": "value2"}
+  #     {"otrkey": "40_jahre_feste", "key2": "value2"}
+  #   ]
+  # }
+  # dataExpected: JSON.stringify {
+  #   "login": "true"
+  #   "results": [
+  #     {"otrkey": "20_jahre_feste", "key2": "value2"}
+  #     {"otrkey": "30_jahre_feste", "key2": "value2"}
+  #     {"otrkey": "40_jahre_feste", "key2": "value2"}
+  #   ]
+  # }
+  fieldName: 'body'
+  fieldResult: {
+    "values": {
+      "expected": JSON.stringify {
+        "login": "true"
+        "results": [
+          {"otrkey": "20_jahre_feste", "key2": "value2"}
+          {"otrkey": "30_jahre_feste", "key2": "value2"}
+          {"otrkey": "40_jahre_feste", "key2": "value2"}
+        ]
+      }
+      "actual": JSON.stringify {
+        "login": "true"
+        "results": [
+          {"otrkey": "20_jahre_feste", "key2": "value2"}
+          {"otrkey": "30_jahre_feste", "key2": "value2"}
+          {"otrkey": "40_jahre_feste", "key2": "value2"}
+        ]
+      }
+    },
+    "errors": [],
+    "kind": "json"
   }
   expectedOutput: """
 <wrapStart><startTag>{</endTag>
@@ -680,25 +852,44 @@ b.bodyOkWithNestedObjectsInArrays =
 
 b.bodyOkWithNestedStringsInArrays =
   testDesc: 'when expected and real body are the same and contains array of strings'
-  dataReal: JSON.stringify {
-    "login": "true"
-    "results": [
-      "BooBoo"
-      "MrauMrau"
-      "BauBau"
-    ]
-  }
-  dataExpected: JSON.stringify {
-    "login": "true"
-    "results": [
-      "BooBoo"
-      "MrauMrau"
-      "BauBau"
-    ]
-  }
-  gavelResult: {
-    "results": [],
-    "validator": "JsonExample"
+  # dataReal: JSON.stringify {
+  #   "login": "true"
+  #   "results": [
+  #     "BooBoo"
+  #     "MrauMrau"
+  #     "BauBau"
+  #   ]
+  # }
+  # dataExpected: JSON.stringify {
+  #   "login": "true"
+  #   "results": [
+  #     "BooBoo"
+  #     "MrauMrau"
+  #     "BauBau"
+  #   ]
+  # }
+  fieldName: 'body'
+  fieldResult: {
+    "values": {
+      "expected": JSON.stringify {
+        "login": "true"
+        "results": [
+          "BooBoo"
+          "MrauMrau"
+          "BauBau"
+        ]
+      }
+      "actual": JSON.stringify {
+        "login": "true"
+        "results": [
+          "BooBoo"
+          "MrauMrau"
+          "BauBau"
+        ]
+      }
+    }
+    "errors": [],
+    "kind": "json"
   }
   expectedOutput: """
   <wrapStart><startTag>{</endTag>
@@ -714,25 +905,44 @@ b.bodyOkWithNestedStringsInArrays =
 
 b.bodyOkWithNestedArraysInArrays =
   testDesc: 'when expected and real body are the same and contains array of arrays'
-  dataReal: JSON.stringify {
-    "login": "true"
-    "results": [
-      [1,2,3]
-      [1,2,3]
-      [1,2,3]
-    ]
-  }
-  dataExpected: JSON.stringify {
-    "login": "true"
-    "results": [
-      [1,2,3]
-      [1,2,3]
-      [1,2,3]
-    ]
-  }
-  gavelResult: {
-    "results": [],
-    "validator": "JsonExample"
+  # dataReal: JSON.stringify {
+  #   "login": "true"
+  #   "results": [
+  #     [1,2,3]
+  #     [1,2,3]
+  #     [1,2,3]
+  #   ]
+  # }
+  # dataExpected: JSON.stringify {
+  #   "login": "true"
+  #   "results": [
+  #     [1,2,3]
+  #     [1,2,3]
+  #     [1,2,3]
+  #   ]
+  # }
+  fieldName: 'body'
+  fieldResult: {
+    "values": {
+      "expected": JSON.stringify {
+        "login": "true"
+        "results": [
+          [1,2,3]
+          [1,2,3]
+          [1,2,3]
+        ]
+      }
+      "actual": JSON.stringify {
+        "login": "true"
+        "results": [
+          [1,2,3]
+          [1,2,3]
+          [1,2,3]
+        ]
+      }
+    },
+    "errors": [],
+    "kind": "json"
   }
   expectedOutput: """
 <wrapStart><startTag>{</endTag>
@@ -762,25 +972,44 @@ b.bodyOkWithNestedArraysInArrays =
 
 b.bodyOkWithNestedStringsInArraysWrappedKeys =
   testDesc: 'when expected and real body are the same and I want to wrap object keys in additional tags'
-  dataReal: JSON.stringify {
-    "login": "true"
-    "results": [
-      "BooBoo"
-      5
-      "BauBau"
-    ]
-  }
-  dataExpected: JSON.stringify {
-    "login": "true"
-    "results": [
-      "BooBoo"
-      5
-      "BauBau"
-    ]
-  }
-  gavelResult: {
-    "results": [],
-    "validator": "JsonExample"
+  # dataReal: JSON.stringify {
+  #   "login": "true"
+  #   "results": [
+  #     "BooBoo"
+  #     5
+  #     "BauBau"
+  #   ]
+  # }
+  # dataExpected: JSON.stringify {
+  #   "login": "true"
+  #   "results": [
+  #     "BooBoo"
+  #     5
+  #     "BauBau"
+  #   ]
+  # }
+  fieldName: 'body'
+  fieldResult: {
+    "values": {
+      "expected":JSON.stringify {
+        "login": "true"
+        "results": [
+          "BooBoo"
+          5
+          "BauBau"
+        ]
+      }
+      "actual": JSON.stringify {
+        "login": "true"
+        "results": [
+          "BooBoo"
+          5
+          "BauBau"
+        ]
+      }
+    },
+    "errors": [],
+    "kind": "json"
   }
   expectedOutput: """
   <wrapStart><startTag>{</endTag>
@@ -812,7 +1041,3 @@ module.exports = {
   testsHeaders: h
   testsBody: b
 }
-
-
-
-

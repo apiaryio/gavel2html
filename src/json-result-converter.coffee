@@ -11,10 +11,7 @@ class JsonResultConverter extends Converter
     prevLevel = 0
     prevNode = null
     errorsPaths = []
-    # if @usePointers
     errors = @getErrorsFromResults()
-    # else
-    #   errors = @getErrors()
 
     closingBrackets = []
     typesOnLevels = {}
@@ -184,46 +181,6 @@ class JsonResultConverter extends Converter
       return (new Array(level)).join(identString)
 
     return ''
-
-  #@private
-  # THIS LOOKS TO OPERATE ON AMANDA'S RAW OUTPUT.
-  # NEEDS TO BE REMOVED, NO LONGER AMANDA.
-  # getErrors: ()->
-  #   if not (@fieldResult.rawData and @fieldResult.rawData.length)
-  #     return [] # not sure about this, added keys will not be marked as addeds
-
-  #   amandaErrorsPaths = {}
-  #   errors = []
-  #   dataExpectedPointers = []
-
-  #   # get all pointers in expected data
-  #   traverse(@dataExpected).forEach (nodeValue) ->
-  #     dataExpectedPointers.push jsonPointer.compile this.path
-  #     return
-
-  #   # path from real does not exits in expected data so it's addded
-  #   traverse(@dataReal).forEach (nodeValue) ->
-  #     if not (jsonPointer.compile(this.path) in dataExpectedPointers)
-  #       errors.push {pathArray: this.path, value: nodeValue, 'state': 1, 'message': undefined}
-  #     return
-
-  #   # get unique paths in errors
-  #   for i in [0..@fieldResult.rawData.length - 1]
-
-  #     # get pointer from array and sanitize 'null' path array meant as root
-  #     if @fieldResult.rawData[i]['property']
-  #       pointer = jsonPointer.compile @fieldResult.rawData[i]['property']
-  #     else
-  #       pointer = ''
-
-  #     if not amandaErrorsPaths[pointer]
-  #       amandaErrorsPaths[pointer] = @fieldResult.rawData[i]['property'] or []
-
-  #   # get aggregated message and state for each error pointer/pathArray
-  #   for pointer, pathArray of amandaErrorsPaths
-  #     errors.push @getStateAndMessageFromAmandaResult pathArray: pathArray, lowerCasedKeys: false
-
-  #   return errors
 
   #@private
   getErrorsFromResults: () ->

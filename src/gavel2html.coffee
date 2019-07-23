@@ -63,6 +63,8 @@ class Gavel2Html
       @usedErrors = converter.usedErrors
       return result
     catch e
+      console.log('\n\nERROR CAUGHT:', e)
+      console.log('\n\n')
       html = missingStartTag + "Internal validator error\n\n" + endTag
       try
         if typeof(@dataReal) != 'string'

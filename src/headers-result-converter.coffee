@@ -3,20 +3,12 @@ Converter = require './converter'
 
 class HeadersResultConverter extends Converter
   #@protected
-  getLinesFromAmandaResults: ->
-    @_getLines()
-
-  #@protected
   getLinesFromResults: ->
     @_getLines()
 
   #@private
   _getLines: ->
     lineResultGetter = @getStateAndMessageFromResults
-    
-    # if @usePointers
-    # else
-    #   lineResultGetter = @getStateAndMessageFromAmandaResult
 
     @dataReal     = @getFromString @dataReal
     @dataExpected = @getFromString @dataExpected

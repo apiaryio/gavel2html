@@ -71,11 +71,6 @@ class Converter
   formatFragment: ({fragment, message, status, omitSanitize}) ->
     output = ''
 
-    console.log('\n\n---')
-    console.log('fragment:', fragment)
-    console.log('status:', status)
-    console.log('---')
-
     switch status
       when -1
         output += @missingStartTag

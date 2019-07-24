@@ -63,8 +63,7 @@ class Gavel2Html
       @usedErrors = converter.usedErrors
       return result
     catch e
-      console.log('\n\nERROR CAUGHT:', e)
-      console.log('\n\n')
+      console.error('gavelhtml: Internal error.\n', e)
       html = missingStartTag + "Internal validator error\n\n" + endTag
       try
         if typeof(@dataReal) != 'string'
@@ -89,19 +88,16 @@ class Gavel2Html
       @usePointers
     }
 
-    switch @fieldResult?.kind
-      when 'json'
-        if @fieldName == 'headers'
-          return new HeadersResultConverter options
+    if @fieldResult?.kind == 'json'
+      if @fieldName == 'headers'
+        return new HeadersResultConverter options
 
-        transformedData = transformJsonData(options.dataReal, options.dataExpected)
+      transformedData = transformJsonData(options.dataReal, options.dataExpected)
 
-        if transformedData
-          options.dataReal = transformedData.real
-          options.dataExpected = transformedData.expected
-          return new JsonResultConverter options
-
-        return new TextResultConverter options
+      if transformedData
+        options.dataReal = transformedData.real
+        options.dataExpected = transformedData.expected
+        return new JsonResultConverter options
 
     return new TextResultConverter options
 

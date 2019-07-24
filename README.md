@@ -18,9 +18,19 @@ npm install gavel2html
 ## Usage
 
 ```javascript
-Gavel2Html = require('gavel2html');
+const gavel = require('gavel');
+const Gavel2Html = require('gavel2html');
+
+// Perform Gavel validation
+const gavelResult = gavel(expected, actual);
 
 const gavel2html = new Gavel2Html({
+  // Pass the name of the field you wish to render
+  fieldName: 'body',
+  // ...and the validation result chunk for that field
+  fieldResult: gavelResult.fields.body,
+
+  // ...not sure values are even needed
   dataReal: '{"name": "hell"}',
   dataExpected: '{"name": "hello"}',
 });

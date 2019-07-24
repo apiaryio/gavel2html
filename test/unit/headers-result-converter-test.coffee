@@ -2,7 +2,6 @@
 clone    = require 'clone'
 
 HeadersResultConverter = require '../../src/headers-result-converter'
-arrayFixtures = require '../fixtures/gavel2html-legacy'
 pointerFixtures = require '../fixtures/gavel2html-pointers'
 
 describe 'HeadersResultConverter', () ->
@@ -26,26 +25,13 @@ describe 'HeadersResultConverter', () ->
       }
     ]
 
-    describe 'getLinesFromAmandaResults', () ->
-      describe 'when called', () ->
-        it 'should have proper structure and values', () ->
-          jsonResultConverter = new HeadersResultConverter {
-            dataReal: arrayFixtures.testsHeaders.headersRealFailValueCase.dataReal
-            dataExpected: arrayFixtures.testsHeaders.headersRealFailValueCase.dataExpected
-            gavelResult: arrayFixtures.testsHeaders.headersRealFailValueCase.gavelResult
-            usePointers: false
-          }
-          result = jsonResultConverter.getLinesFromAmandaResults()
-          result = clone result, false
-          assert.deepEqual result, expectedOutput
-
     describe 'getLinesFromResults', () ->
       describe 'when called', () ->
         it 'should have proper structure and values', () ->
           jsonResultConverter = new HeadersResultConverter {
-            dataReal: pointerFixtures.testsHeaders.headersRealFailValueCase.dataReal
-            dataExpected: pointerFixtures.testsHeaders.headersRealFailValueCase.dataExpected
-            gavelResult: pointerFixtures.testsHeaders.headersRealFailValueCase.gavelResult
+            dataReal: pointerFixtures.testsHeaders.headersRealFailValueCase.fieldResult.values.actual
+            dataExpected: pointerFixtures.testsHeaders.headersRealFailValueCase.fieldResult.values.expected
+            fieldResult: pointerFixtures.testsHeaders.headersRealFailValueCase.fieldResult
             usePointers: true
           }
           result = jsonResultConverter.getLinesFromResults()
@@ -72,26 +58,13 @@ describe 'HeadersResultConverter', () ->
       }
     ]
 
-    describe 'getLinesFromAmandaResults', () ->
-      describe 'when called', () ->
-        it 'should have proper structure and values', () ->
-          jsonResultConverter = new HeadersResultConverter {
-            dataReal: arrayFixtures.testsHeaders.headersRealFailChanged.dataReal
-            dataExpected: arrayFixtures.testsHeaders.headersRealFailChanged.dataExpected
-            gavelResult: arrayFixtures.testsHeaders.headersRealFailChanged.gavelResult
-            usePointers: false
-          }
-          result = jsonResultConverter.getLinesFromAmandaResults()
-          result = clone result, false
-          assert.deepEqual result, expectedOutput
-
     describe 'getLinesFromResults', () ->
       describe 'when called', () ->
         it 'should have proper structure and values', () ->
           jsonResultConverter = new HeadersResultConverter {
-            dataReal: pointerFixtures.testsHeaders.headersRealFailChanged.dataReal
-            dataExpected: pointerFixtures.testsHeaders.headersRealFailChanged.dataExpected
-            gavelResult: pointerFixtures.testsHeaders.headersRealFailChanged.gavelResult
+            dataReal: pointerFixtures.testsHeaders.headersRealFailChanged.fieldResult.values.actual
+            dataExpected: pointerFixtures.testsHeaders.headersRealFailChanged.fieldResult.values.expected
+            fieldResult: pointerFixtures.testsHeaders.headersRealFailChanged.fieldResult
             usePointers: true
           }
           result = jsonResultConverter.getLinesFromResults()
@@ -118,26 +91,13 @@ describe 'HeadersResultConverter', () ->
       }
     ]
 
-    describe 'getLinesFromAmandaResults', () ->
-      describe 'when called', () ->
-        it 'should have proper structure and values', () ->
-          jsonResultConverter = new HeadersResultConverter {
-            dataReal: arrayFixtures.testsHeaders.headersRealFailMiss.dataReal
-            dataExpected: arrayFixtures.testsHeaders.headersRealFailMiss.dataExpected
-            gavelResult: arrayFixtures.testsHeaders.headersRealFailMiss.gavelResult
-            usePointers: false
-          }
-          result = jsonResultConverter.getLinesFromAmandaResults()
-          result = clone result, false
-          assert.deepEqual result, expectedOutput
-
     describe 'getLinesFromResults', () ->
       describe 'when called', () ->
         it 'should have proper structure and values', () ->
           jsonResultConverter = new HeadersResultConverter {
-            dataReal: pointerFixtures.testsHeaders.headersRealFailMiss.dataReal
-            dataExpected: pointerFixtures.testsHeaders.headersRealFailMiss.dataExpected
-            gavelResult: pointerFixtures.testsHeaders.headersRealFailMiss.gavelResult
+            dataReal: pointerFixtures.testsHeaders.headersRealFailMiss.fieldResult.values.actual
+            dataExpected: pointerFixtures.testsHeaders.headersRealFailMiss.fieldResult.values.expected
+            fieldResult: pointerFixtures.testsHeaders.headersRealFailMiss.fieldResult
             usePointers: true
           }
           result = jsonResultConverter.getLinesFromResults()

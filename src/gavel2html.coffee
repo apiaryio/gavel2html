@@ -14,13 +14,16 @@ transformJsonData = (real, expected) ->
   return {real: realTransformed, expected: expectedTransformed}
 
 class Gavel2Html
-  constructor: ({dataReal, dataExpected, gavelResult, usePointers}) ->
-    @dataReal     = dataReal
-    @dataExpected = dataExpected
-    @gavelResult  = gavelResult
+  constructor: ({ fieldName, fieldResult, usePointers }) ->
+    @fieldName    = fieldName
+    # Real and expected data are stored only to preserve
+    # previously existing references. Remove this and use "fieldResult"
+    # referenced directly when refactoring.
+    @dataReal     = fieldResult.values.actual
+    @dataExpected = fieldResult.values.expected
+    @fieldResult  = fieldResult
     @usePointers  = usePointers
     @usedErrors   = []
-
 
   getHtml: (givenOptions = {}) ->
     {
@@ -60,6 +63,7 @@ class Gavel2Html
       @usedErrors = converter.usedErrors
       return result
     catch e
+      console.error('gavelhtml: Internal error.\n', e)
       html = missingStartTag + "Internal validator error\n\n" + endTag
       try
         if typeof(@dataReal) != 'string'
@@ -77,26 +81,23 @@ class Gavel2Html
   #@private
   getConverter: ->
     options = {
+      @fieldName
       @dataReal
       @dataExpected
-      @gavelResult
+      @fieldResult
       @usePointers
     }
 
-    switch @gavelResult?.validator
-      when 'TextDiff'
-        return new TextResultConverter options
-
-      when 'JsonSchema', 'JsonExample'
-        transformedData = transformJsonData(options.dataReal, options.dataExpected)
-        if transformedData
-          options.dataReal = transformedData.real
-          options.dataExpected = transformedData.expected
-          return new JsonResultConverter options
-        return new TextResultConverter options
-
-      when 'HeadersJsonSchema', 'HeadersJsonExample'
+    if @fieldResult?.kind == 'json'
+      if @fieldName == 'headers'
         return new HeadersResultConverter options
+
+      transformedData = transformJsonData(options.dataReal, options.dataExpected)
+
+      if transformedData
+        options.dataReal = transformedData.real
+        options.dataExpected = transformedData.expected
+        return new JsonResultConverter options
 
     return new TextResultConverter options
 

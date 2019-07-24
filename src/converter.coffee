@@ -21,7 +21,7 @@ escapeBasicHtml = (val) ->
 
 
 class Converter
-  constructor: ({@dataReal, @dataExpected, @gavelResult, @usePointers}) ->
+  constructor: ({@dataReal, @dataExpected, @fieldResult, @usePointers}) ->
     @usedErrors   = []
 
   getHtml: (options = {}) ->
@@ -120,70 +120,36 @@ class Converter
 
   #@private
   # aggregate all errors for given path and mark them with state missing, added, changed etc..
-  getStateAndMessageFromAmandaResult: ({pathArray, lowerCasedKeys}) ->
-    resultsCount = @gavelResult?.rawData?.length or 0
-    state = 0
-    message = ''
-
-    if resultsCount
-      [transformKeysFn, compiledPointersKey] = @getPointerTransformKeys lowerCasedKeys
-      @buildDataRealPointers {transformKeysFn, compiledPointersKey}
-
-      pathArrayTransformed = pathArray.map transformKeysFn
-
-      for i in [0..resultsCount-1]
-        if @areArraysIdentical pathArrayTransformed, @gavelResult.rawData[i]?['property'] or []
-          errorPointer = jsonPointer.compile(@gavelResult.rawData[i]?['property'] or [])
-          # key is missing in real and is present in expected, so it's missing
-          if errorPointer not in @dataRealPointers[compiledPointersKey]
-            if message
-              message = ' | ' + message
-            message = @gavelResult.rawData[i]['message'] + message
-            state = -1
-
-          else
-
-            # key is present in both real and expected, so its changed (different value primitive type probably)
-            if not state
-              state = 2
-            if message
-              message += " | "
-            message += @gavelResult.rawData[i]['message']
-
-    return {pathArray: pathArray, 'state': state, 'message': message}
-
-  #@private
-  # aggregate all errors for given path and mark them with state missing, added, changed etc..
   getStateAndMessageFromResults: ({pathArray, lowerCasedKeys}) ->
-    resultsCount = @gavelResult?.results?.length
+    errorsCount = @fieldResult?.errors?.length
     state = 0
     message = ''
 
-    if resultsCount
+    if errorsCount
       [transformKeysFn, compiledPointersKey] = @getPointerTransformKeys lowerCasedKeys
       @buildDataRealPointers {transformKeysFn, compiledPointersKey}
 
       pathArrayTransformed = pathArray.map(transformKeysFn)
 
-      for result in @gavelResult.results
-        if result['pointer']? # filter out non json related errors
-          if @areArraysIdentical pathArrayTransformed, jsonPointer.parse(result['pointer'])
-            errorPointer = result['pointer']
+      for error in @fieldResult.errors
+        errorPointer = error.location?.pointer
+        
+        if errorPointer? # filter out non json related errors
+          if @areArraysIdentical pathArrayTransformed, jsonPointer.parse(errorPointer)
             # key is missing in real and is present in expected, so it's missing
             if errorPointer not in @dataRealPointers[compiledPointersKey]
               if message
                 message = ' | ' + message
-              message = result['message'] + message
+              message = error['message'] + message
               state = -1
 
             else
-
               # key is present in both real and expected, so its changed (different value primitive typeprobably)
               if not state
                 state = 2
               if message
                 message += " | "
-              message += result['message']
+              message += error['message']
 
     return {pathArray: pathArray, 'state': state, 'message': message}
 

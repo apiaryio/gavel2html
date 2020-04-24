@@ -34,10 +34,10 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^1.10.0",
-    "coffeeify": "^2.1.0",
     "coffee-script": "^1.9.1",
-    "mocha": "^2.2.4",
-    "mochify": "3.1.1"
+    "coffeeify": "^2.1.0",
+    "mocha": "^5.2.0",
+    "mochify": "^6.6.0"
   },
   "dependencies": {
     "clone": "^1.0.2",

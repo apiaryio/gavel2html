@@ -36,7 +36,7 @@
     "chai": "^1.10.0",
     "coffee-script": "^1.9.1",
     "coffeeify": "^2.1.0",
-    "mocha": "^5.2.0",
+    "mocha": "^7.1.2",
     "mochify": "^6.6.0"
   },
   "dependencies": {

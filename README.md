@@ -7,35 +7,31 @@
 [![devDependency Status](https://david-dm.org/apiaryio/gavel2html/dev-status.svg)](https://david-dm.org/apiaryio/gavel2html?type=dev)
 [![Known Vulnerabilities](https://snyk.io/test/npm/gavel2html/badge.svg)](https://snyk.io/test/npm/gavel2html)
 
-The `gavel2html` utility renders HTML diff from [Gavel.js][] output.
+A utility library to render an HTML diff from the [Gavel.js][] validation results.
 
 ## Installation
 
-```
+```bash
 npm install gavel2html
 ```
 
 ## Usage
 
-```javascript
+```js
 const gavel = require('gavel');
 const Gavel2Html = require('gavel2html');
 
-// Perform Gavel validation
+// Validate expected/actual HTTP transaction with Gavel.
 const gavelResult = gavel(expected, actual);
 
-const gavel2html = new Gavel2Html({
+const renderer = new Gavel2Html({
   // Pass the name of the field you wish to render
   fieldName: 'body',
-  // ...and the validation result chunk for that field
+  // ...and the validation result for that field
   fieldResult: gavelResult.fields.body,
-
-  // ...not sure values are even needed
-  dataReal: '{"name": "hell"}',
-  dataExpected: '{"name": "hello"}',
 });
 
-const html = gavel2html.getHtml({
+const html = renderer.getHtml({
   wrapWith: '##data',
   startTag: '<span>',
   endTag: '</span>',
@@ -54,28 +50,66 @@ console.log(html);
 ```
 <span>{&quot;name&quot;: &quot;hell</span><span class="missing">o</span><span>&quot;}</span>
 ```
+## API
 
-### Options
+### `Gavel2Html(options)`
 
-- `dataReal` (string, required) - Actual body data
-- `dataExpected` (string, required) - Expected body data
-- `gavelResult` (object) - Validation object, output from [Gavel.js][]
-- `usePointers`: true (boolean, default) - Whether to use JSON pointers from 'results' key in Gavel data to not to rely on Amanda's data
+Creates a renderer instance with the given options.
 
-### `getHtml` options
+#### Options
 
-- `wrapWith` (string)
-- `startTag` (string)
-- `endTag` (string)
-- `missingStartTag` (string) - String to be used as a start when marking _missing_ sequence of characters.
-- `addedStartTag` (string) - String to be used as a start when marking _added_ sequence of characters.
-- `changedStartTag` (string) - String to be used as a start when marking _changed_ sequence of characters.
-- `comments` (boolean)
-- `commentStartTag` (string)
-- `commentEndTag` (string)
-- `identString` (string) - String to use for one level of indentation.
+```ts
+{
+  // Gavel validation results field name.
+  // Affects the converter being used internally.
+  fieldName: 'statusCode' | 'headers' | 'body'
 
-> **Note:** The gavel2html library is underdocumented. Please see [#7](https://github.com/apiaryio/gavel2html/issues/7) for details.
+  // Gavel validation results for the given `fieldName`.
+  // Refer to the Gavel's documentation for more details.
+  fieldResults: GavelFieldValidationResults
 
+  // Use JSON pointers from the Gavel validation results
+  // passed in the `fieldResults` option.
+  usePointers?: boolean
+}
+```
 
-[Gavel.js]: https://github.com/apiaryio/gavel.js
+### `getHtml(options): string`
+
+Returns an HTML string representing the markup of the validation results data diff.
+
+#### Options
+
+```ts
+{
+  // String to wrap the outpout data with.
+  // The "##data" acts as a placeholder that gets
+  // substituted with the output results.
+  // Example: <div>##data</div>.
+  wrapWith?: string = '##data'
+  startTag?: string = '<li>'
+  endTag?: string = '</li>'
+  jsonKeyStartTag?: string = ''
+  jsonKeyEndTag?: string = ''
+
+  // String to use at the beginning of
+  // a missing sequence of characters.
+  missingStartTag?: string
+
+  // String to use at the beginning of
+  // an added sequence of characters.
+  addedStartTag?: string
+
+  // String to use as a start when marking
+  // a changed sequence of characters.
+  changedStartTag?: string
+
+  // Include comments in the output.
+  comments?: boolean
+  commentStartTag?: string
+  commentEndTag?: string
+
+  // String to use as a one level of indentation.
+  identString?: string = '  '
+}
+```

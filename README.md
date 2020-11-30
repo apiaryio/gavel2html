@@ -113,3 +113,5 @@ Returns an HTML string representing the markup of the validation results data di
   identString?: string = '  '
 }
 ```
+
+[Gavel.js]: https://github.com/apiaryio/gavel.js

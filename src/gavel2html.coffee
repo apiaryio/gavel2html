@@ -74,7 +74,10 @@ class Gavel2Html
       html += @dataReal
 
       if wrapWith
-        html = wrapWith.replace '##data', html
+        # Provide a function as the string replace argument
+        # to ignore string replacement sequences ($&, $1, etc.)
+        # that might have formed by the actual data.
+        html = wrapWith.replace '##data', () -> html
 
       return html
 

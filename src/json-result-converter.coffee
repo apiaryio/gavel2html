@@ -156,7 +156,7 @@ class JsonResultConverter extends Converter
             .replace(/"/g, '\"')
             # Replace the "$" character in the value to prevent it
             # from forming a string replacement sequence ($&, $1, etc.).
-            .replace('$', '$$$')
+            .replace('$', '$$')
           )
         s += postStringValue if postStringValue
         s += '&quot;' # sanitizeData('"')

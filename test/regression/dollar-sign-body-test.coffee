@@ -23,4 +23,4 @@ describe 'Dollar sign in the body', ->
   html = diff.getHtml()
 
   it 'escapes the dollar sign in the diff', ->
-    assert.equal(html, '<li>{</li>\n<li>  &quot;symbol&quot;: &quot;$$&quot;</li>\n<li>}</li>')
+    assert.equal(html, '<li>{</li>\n<li>  &quot;symbol&quot;: &quot;$&quot;</li>\n<li>}</li>')

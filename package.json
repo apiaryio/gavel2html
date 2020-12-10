@@ -1,6 +1,6 @@
 {
   "name": "gavel2html",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Convert output from Gavel to HTML",
   "main": "lib/index.js",
   "scripts": {

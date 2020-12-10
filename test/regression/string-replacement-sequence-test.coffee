@@ -22,5 +22,5 @@ describe 'Dollar sign in the body', ->
   diff = new Gavel2Html payload
   html = diff.getHtml()
 
-  it 'escapes the dollar sign in the diff', ->
+  it 'escapes the string replacement sequence in the diff', ->
     assert.equal(html, '<li>{</li>\n<li>  &quot;symbol&quot;: &quot;$&quot;</li>\n<li>}</li>')

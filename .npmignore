@@ -10,7 +10,6 @@ cov.*
 *.log
 
 # List specific to .npmignore
-.travis.yml
 .npmignore
 docs/
 img/

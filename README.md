@@ -1,8 +1,6 @@
 # gavel2html
 
 [![npm version](https://badge.fury.io/js/gavel2html.svg)](https://badge.fury.io/js/gavel2html)
-[![Build Status](https://travis-ci.org/apiaryio/gavel2html.svg?branch=master)](https://travis-ci.org/apiaryio/gavel2html)
-[![Build status](https://ci.appveyor.com/api/projects/status/1rj4gt5g5prjp5ah/branch/master?svg=true)](https://ci.appveyor.com/project/Apiary/gavel2html/branch/master)
 [![Dependency Status](https://david-dm.org/apiaryio/gavel2html.svg)](https://david-dm.org/apiaryio/gavel2html)
 [![devDependency Status](https://david-dm.org/apiaryio/gavel2html/dev-status.svg)](https://david-dm.org/apiaryio/gavel2html?type=dev)
 [![Known Vulnerabilities](https://snyk.io/test/npm/gavel2html/badge.svg)](https://snyk.io/test/npm/gavel2html)

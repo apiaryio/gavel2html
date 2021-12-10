@@ -11,7 +11,7 @@
     "test": "npm run test:server && npm run test:browser",
     "test:server": "mocha \"test/**/*.coffee\"",
     "test:browser": "mochify \"test/**/*.coffee\" --transform=coffeeify --extension=.coffee",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "homepage": "https://github.com/apiaryio/gavel2html",
   "repository": {
@@ -33,17 +33,17 @@
   "author": "Apiary Czech Republic, s.r.o. <support@apiary.io>",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^1.10.0",
-    "coffee-script": "^1.9.1",
+    "chai": "^4.3.4",
+    "coffee-script": "^1.12.7",
     "coffeeify": "^2.1.0",
-    "mocha": "^7.1.2",
-    "mochify": "^7.0.0"
+    "mocha": "^9.1.3",
+    "mochify": "^8.1.0"
   },
   "dependencies": {
-    "clone": "^1.0.2",
+    "clone": "^2.1.2",
     "googlediff": "^0.1.0",
     "is-type": "~0.0.1",
-    "json-pointer": "^0.3.0",
+    "json-pointer": "^0.6.1",
     "traverse": "^0.6.6"
   }
 }

@@ -11,7 +11,7 @@
     "test": "npm run test:server && npm run test:browser",
     "test:server": "mocha \"test/**/*.coffee\"",
     "test:browser": "mochify \"test/**/*.coffee\" --transform=coffeeify --extension=.coffee",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run test && npm run build"
   },
   "files": [
     "lib",

@@ -13,6 +13,10 @@
     "test:browser": "mochify \"test/**/*.coffee\" --transform=coffeeify --extension=.coffee",
     "prepublishOnly": "npm run build"
   },
+  "files": [
+    "lib",
+    "LICENSE"
+  ],
   "homepage": "https://github.com/apiaryio/gavel2html",
   "repository": {
     "type": "git",

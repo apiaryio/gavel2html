@@ -63,7 +63,11 @@ class HeadersResultConverter extends Converter
 
   #@private
   getFromString: (header) ->
-    if not header or typeof header isnt 'string'
+    # In case header is not set for whichever reason
+    # fallback to an empty object, not to break headers handling.
+    if not header
+      return {}
+    else if typeof header isnt 'string'
       return header
 
     headersOut = {}
